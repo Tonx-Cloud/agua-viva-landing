@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, FormEvent, useEffect, useCallback } from "react";
-import { X, Mail, Send, ShoppingCart, Info, Gift, MessageCircle, Check } from "lucide-react";
+import { useState, FormEvent, useEffect, useCallback, useRef } from "react";
+import { X, Mail, Send, ShoppingCart, Info, Gift, MessageCircle, Check, Copy, AlertTriangle } from "lucide-react";
 
 const EMAIL = "ancartor@yahoo.com";
 const FORMSUBMIT_URL = `https://formsubmit.co/${EMAIL}`;
@@ -32,7 +32,9 @@ export default function BuyModal() {
   const [mensagem, setMensagem] = useState(
     "Olá! Quero comprar o livro Água-Viva.\nGostaria de saber sobre: (valor / entrega / dedicatória).\nObrigado!"
   );
-  const [enviado, setEnviado] = useState<"email" | "whatsapp" | "form" | null>(null);
+  const [enviado, setEnviado] = useState<"email" | "whatsapp" | "form" | "copiado" | null>(null);
+  const [mailtoFalhou, setMailtoFalhou] = useState(false);
+  const mailtoRef = useRef<HTMLAnchorElement>(null);
 
   // Fechar com ESC
   const handleEsc = useCallback(
@@ -58,8 +60,9 @@ export default function BuyModal() {
   // Validação simples
   const camposValidos = nome.trim().length > 0 && email.trim().length > 0 && email.includes("@");
 
-  // Montar corpo da mensagem
-  const montarMensagem = () => {
+  // Montar corpo da mensagem (com CRLF para mailto RFC 6068)
+  const montarMensagem = (useCRLF = false) => {
+    const lb = useCRLF ? "\r\n" : "\n";
     const partes = [
       `Olá, Antônio Carlos!`,
       ``,
@@ -68,25 +71,71 @@ export default function BuyModal() {
     ];
     if (cidade.trim()) partes.push(`Cidade/UF: ${cidade}`);
     partes.push(``);
-    if (mensagem.trim()) partes.push(mensagem.trim());
+    if (mensagem.trim()) partes.push(mensagem.trim().replace(/\n/g, lb));
     partes.push(``);
     partes.push(`Aguardo retorno. Obrigado(a)!`);
-    return partes.join("\n");
+    return partes.join(lb);
   };
 
-  // === ENVIAR POR E-MAIL (mailto) ===
+  // Montar URL mailto
+  const buildMailtoUrl = () => {
+    const subject = "Pedido / Contato - Livro Agua-Viva";
+    const body = montarMensagem(true);
+    return `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
+
+  // Copiar mensagem para clipboard (fallback)
+  const handleCopiar = async () => {
+    const texto = `Para: ${EMAIL}\nAssunto: Pedido / Contato - Livro Agua-Viva\n\n${montarMensagem(false)}`;
+    try {
+      await navigator.clipboard.writeText(texto);
+      setEnviado("copiado");
+      setTimeout(() => setEnviado(null), 5000);
+    } catch {
+      // Fallback para browsers antigos
+      const ta = document.createElement("textarea");
+      ta.value = texto;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      setEnviado("copiado");
+      setTimeout(() => setEnviado(null), 5000);
+    }
+  };
+
+  // === ENVIAR POR E-MAIL (mailto via <a> programático) ===
   const handleMailto = () => {
     if (!camposValidos) return;
 
-    const subject = "Pedido / Contato — Livro Água-Viva";
-    const body = montarMensagem();
+    // Técnica: criar <a> invisível e clicar — mais confiável que location.href
+    const link = document.createElement("a");
+    link.href = buildMailtoUrl();
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
 
-    // Usar location.href é mais confiável que window.open para mailto
-    const mailtoUrl = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailtoUrl;
+    // Detectar se mailto funcionou: se após 2s a página não perdeu foco,
+    // o client de e-mail provavelmente não abriu
+    let mailtoAbriu = false;
+    const onBlur = () => { mailtoAbriu = true; };
+    window.addEventListener("blur", onBlur);
 
-    setEnviado("email");
-    setTimeout(() => setEnviado(null), 5000);
+    setTimeout(() => {
+      window.removeEventListener("blur", onBlur);
+      document.body.removeChild(link);
+
+      if (mailtoAbriu) {
+        setEnviado("email");
+        setMailtoFalhou(false);
+        setTimeout(() => setEnviado(null), 6000);
+      } else {
+        // Mailto não abriu — mostrar fallback
+        setMailtoFalhou(true);
+      }
+    }, 2500);
   };
 
   // === ENVIAR POR WHATSAPP ===
@@ -122,7 +171,9 @@ export default function BuyModal() {
         ? "WhatsApp aberto! Escolha o contato do autor e envie."
         : enviado === "form"
           ? "Formulário enviado com sucesso!"
-          : null;
+          : enviado === "copiado"
+            ? `Mensagem copiada! Cole no seu e-mail e envie para ${EMAIL}`
+            : null;
 
   return (
     <>
@@ -214,6 +265,40 @@ export default function BuyModal() {
               <div className="mb-4 flex items-start gap-2 bg-green-50 border border-green-200 text-green-800 rounded-xl p-4 text-sm">
                 <Check size={18} className="shrink-0 mt-0.5" aria-hidden="true" />
                 <span>{feedbackMsg}</span>
+              </div>
+            )}
+
+            {/* Fallback: mailto não abriu */}
+            {mailtoFalhou && (
+              <div className="mb-4 bg-amber-50 border border-amber-200 rounded-xl p-4">
+                <div className="flex items-start gap-2 text-amber-800 text-sm mb-3">
+                  <AlertTriangle size={18} className="shrink-0 mt-0.5" aria-hidden="true" />
+                  <span>
+                    <strong>Não foi possível abrir seu e-mail automaticamente.</strong><br />
+                    Use uma das opções abaixo:
+                  </span>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <a
+                    ref={mailtoRef}
+                    href={buildMailtoUrl()}
+                    className="flex-1 inline-flex items-center justify-center gap-2 py-2.5 px-4 bg-ocean-600 text-white rounded-lg font-medium hover:bg-ocean-700 transition-colors text-sm"
+                  >
+                    <Mail size={16} aria-hidden="true" />
+                    Tentar abrir e-mail
+                  </a>
+                  <button
+                    type="button"
+                    onClick={handleCopiar}
+                    className="flex-1 inline-flex items-center justify-center gap-2 py-2.5 px-4 bg-amber-600 text-white rounded-lg font-medium hover:bg-amber-700 transition-colors text-sm"
+                  >
+                    <Copy size={16} aria-hidden="true" />
+                    Copiar mensagem
+                  </button>
+                </div>
+                <p className="text-xs text-amber-700 mt-2">
+                  Envie para: <strong>{EMAIL}</strong>
+                </p>
               </div>
             )}
 
