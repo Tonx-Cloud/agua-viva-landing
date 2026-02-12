@@ -1,24 +1,44 @@
 "use client";
 
 import { useState, FormEvent } from "react";
-import { X, Mail, Send, ShoppingCart } from "lucide-react";
+import { X, Mail, Send, ShoppingCart, Info, Gift } from "lucide-react";
 
 const EMAIL = "ancartor@yahoo.com";
 const FORMSUBMIT_URL = `https://formsubmit.co/${EMAIL}`;
+
+const OPCOES = [
+  {
+    icone: ShoppingCart,
+    titulo: "Comprar agora",
+    desc: "Envie sua mensagem e finalize o pedido",
+  },
+  {
+    icone: Info,
+    titulo: "Informações",
+    desc: "Valores, entrega e detalhes do livro",
+  },
+  {
+    icone: Gift,
+    titulo: "Dedicatória",
+    desc: "Peça um exemplar especial para presentear",
+  },
+];
 
 export default function BuyModal() {
   const [open, setOpen] = useState(false);
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [cidade, setCidade] = useState("");
-  const [mensagem, setMensagem] = useState("");
+  const [mensagem, setMensagem] = useState(
+    "Olá! Quero comprar o livro Água-Viva.\nGostaria de saber sobre: (valor / entrega / dedicatória).\nObrigado!"
+  );
 
   const handleMailto = () => {
     const subject = encodeURIComponent(
-      "Interesse no livro Água-Viva — Antônio Carlos Tótoro"
+      "Pedido / Contato — Livro Água-Viva"
     );
     const body = encodeURIComponent(
-      `Olá, Antônio Carlos!\n\nMeu nome é ${nome}.\nE-mail: ${email}\n${cidade ? `Cidade/UF: ${cidade}\n` : ""}\n${mensagem ? `Mensagem: ${mensagem}\n` : ""}\nGostaria de adquirir o livro Água-Viva.\n\nAguardo retorno. Obrigado(a)!`
+      `Olá, Antônio Carlos!\n\nMeu nome é ${nome}.\nE-mail: ${email}\n${cidade ? `Cidade/UF: ${cidade}\n` : ""}\n${mensagem}\n\nAguardo retorno. Obrigado(a)!`
     );
     window.open(`mailto:${EMAIL}?subject=${subject}&body=${body}`, "_self");
   };
@@ -29,23 +49,55 @@ export default function BuyModal() {
 
   return (
     <>
-      {/* Botão flutuante CTA */}
-      <div id="comprar" className="py-16 bg-gradient-to-b from-ocean-900 to-ocean-950">
-        <div className="mx-auto max-w-3xl px-4 text-center">
-          <h2 className="font-serif text-3xl sm:text-4xl font-bold text-sand-50 mb-4">
-            Garanta o seu exemplar
-          </h2>
-          <p className="text-sand-300 text-lg mb-8 max-w-lg mx-auto">
-            Entre em contato diretamente com o autor para adquirir
-            o livro Água-Viva.
-          </p>
-          <button
-            onClick={() => setOpen(true)}
-            className="inline-flex items-center gap-3 px-10 py-5 text-xl font-bold rounded-2xl bg-gold-500 text-ocean-950 hover:bg-gold-400 transition-all shadow-2xl hover:shadow-gold-500/30 hover:-translate-y-1"
-          >
-            <ShoppingCart size={24} aria-hidden="true" />
-            Comprar agora
-          </button>
+      {/* Seção CTA Comprar */}
+      <div id="comprar" className="py-20 sm:py-28 bg-gradient-to-b from-ocean-900 to-ocean-950">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6">
+          <div className="text-center mb-12">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-sand-50 mb-4">
+              Leve &ldquo;Água-Viva&rdquo; para a sua estante
+            </h2>
+            <p className="text-sand-300 text-lg max-w-lg mx-auto">
+              Quer comprar, tirar dúvidas, pedir dedicatória ou combinar
+              entrega? Fale diretamente com o autor. É simples e&nbsp;rápido.
+            </p>
+          </div>
+
+          {/* Cards de opções */}
+          <div className="grid sm:grid-cols-3 gap-4 sm:gap-6 mb-12 max-w-3xl mx-auto">
+            {OPCOES.map((opcao) => {
+              const Icone = opcao.icone;
+              return (
+                <div
+                  key={opcao.titulo}
+                  className="bg-ocean-800/50 backdrop-blur rounded-2xl p-6 text-center border border-ocean-700/40 hover:border-gold-500/40 transition-all"
+                >
+                  <Icone
+                    size={28}
+                    className="mx-auto mb-3 text-gold-400"
+                    aria-hidden="true"
+                  />
+                  <h3 className="font-serif font-bold text-sand-50 text-lg mb-1">
+                    {opcao.titulo}
+                  </h3>
+                  <p className="text-sand-400 text-sm">{opcao.desc}</p>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="text-center">
+            <button
+              onClick={() => setOpen(true)}
+              className="inline-flex items-center gap-3 px-10 py-5 text-xl font-bold rounded-2xl bg-gold-500 text-ocean-950 hover:bg-gold-400 transition-all shadow-2xl hover:shadow-gold-500/30 hover:-translate-y-1"
+            >
+              <ShoppingCart size={24} aria-hidden="true" />
+              Comprar agora
+            </button>
+            <p className="text-sand-500 text-sm mt-4">
+              Você envia a mensagem e o autor retorna para combinar os
+              próximos&nbsp;passos.
+            </p>
+          </div>
         </div>
       </div>
 
@@ -74,7 +126,7 @@ export default function BuyModal() {
             </button>
 
             <h3 className="font-serif text-2xl font-bold text-ocean-950 mb-2">
-              Adquirir Água-Viva
+              Pedido / Contato — Livro Água-Viva
             </h3>
             <p className="text-ocean-600 text-sm mb-6">
               Preencha seus dados e envie sua solicitação ao autor.
@@ -91,7 +143,7 @@ export default function BuyModal() {
               <input
                 type="hidden"
                 name="_subject"
-                value="Nova solicitação — Livro Água-Viva"
+                value="Pedido / Contato — Livro Água-Viva"
               />
               <input type="text" name="_honey" className="hidden" />
 
@@ -157,17 +209,15 @@ export default function BuyModal() {
                   htmlFor="mensagem"
                   className="block text-sm font-semibold text-ocean-800 mb-1"
                 >
-                  Mensagem{" "}
-                  <span className="text-ocean-400 font-normal">(opcional)</span>
+                  Mensagem
                 </label>
                 <textarea
                   id="mensagem"
                   name="mensagem"
-                  rows={3}
+                  rows={4}
                   value={mensagem}
                   onChange={(e) => setMensagem(e.target.value)}
                   className="w-full rounded-xl border border-sand-300 px-4 py-3 text-ocean-900 focus:border-ocean-500 focus:ring-2 focus:ring-ocean-200 transition-colors resize-none"
-                  placeholder="Deixe sua mensagem para o autor..."
                 />
               </div>
 
@@ -191,8 +241,8 @@ export default function BuyModal() {
             </form>
 
             <p className="text-xs text-ocean-400 mt-4 text-center">
-              Seus dados serão enviados diretamente ao autor. Não armazenamos
-              informações.
+              Ao enviar, você concorda em ser contatado pelo autor para
+              finalizar o pedido.
             </p>
           </div>
         </div>

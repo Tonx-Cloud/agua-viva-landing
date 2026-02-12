@@ -2,18 +2,18 @@ import { Sparkles } from "lucide-react";
 
 const TRECHOS = [
   {
-    texto:
-      "A água-viva nas mãos é bola de cristal… entre queimar-se ou não…",
+    texto_1: "A água-viva nas mãos é bola de cristal…",
+    texto_2: "…um instante de hesitação entre queimar-se ou não…",
     subtitulo: "I",
   },
   {
-    texto:
-      "A água-viva nas mãos é vidro vivo… é energia natural cativa…",
+    texto_1: "A água-viva nas mãos é vidro vivo…",
+    texto_2: "…é energia natural cativa…",
     subtitulo: "II",
   },
   {
-    texto:
-      "A água-viva nas mãos é forma de poder… entre torná-la água-morta ou não.",
+    texto_1: "A água-viva nas mãos é forma de poder…",
+    texto_2: "…entre torná-la água-morta ou não.",
     subtitulo: "III",
   },
 ];
@@ -34,8 +34,12 @@ export default function Tasting() {
             </span>
           </div>
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-sand-50 mb-6">
-            Prove antes de mergulhar
+            Degustação — trechos selecionados
           </h2>
+          <p className="text-sand-300 text-lg max-w-xl mx-auto mb-6">
+            Um gosto do que te espera em <em>Água-Viva</em>. Trechos breves,
+            para sentir a textura da&nbsp;escrita.
+          </p>
           <div className="w-16 h-1 bg-gold-500 mx-auto rounded-full" />
         </div>
 
@@ -59,8 +63,11 @@ export default function Tasting() {
               </span>
 
               <blockquote>
-                <p className="font-serif text-lg sm:text-xl text-sand-100 italic leading-relaxed">
-                  {trecho.texto}
+                <p className="font-serif text-lg sm:text-xl text-sand-100 font-bold leading-relaxed">
+                  {trecho.texto_1}
+                </p>
+                <p className="font-serif text-lg sm:text-xl text-sand-200 italic leading-relaxed mt-2">
+                  {trecho.texto_2}
                 </p>
               </blockquote>
 
@@ -71,6 +78,21 @@ export default function Tasting() {
               </div>
             </article>
           ))}
+        </div>
+
+        {/* Rodapé da seção */}
+        <p className="text-center text-sand-500 text-xs mt-10 italic">
+          Trechos para degustação — direitos reservados.
+        </p>
+
+        {/* CTA da seção */}
+        <div className="text-center mt-8">
+          <a
+            href="#comprar"
+            className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold rounded-xl bg-gold-500 text-ocean-950 hover:bg-gold-400 transition-all shadow-lg hover:shadow-gold-500/25 hover:-translate-y-0.5"
+          >
+            Quero o livro completo
+          </a>
         </div>
       </div>
     </section>

@@ -1,5 +1,7 @@
 "use client";
 
+import { BookOpen, Play, MessageCircle } from "lucide-react";
+
 export default function Hero() {
   return (
     <section
@@ -25,29 +27,39 @@ export default function Hero() {
         </div>
 
         {/* Título */}
-        <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-sand-50 mb-6 leading-tight">
+        <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-sand-50 mb-6 leading-tight">
           Água-Viva
+          <span className="block text-2xl sm:text-3xl md:text-4xl font-normal text-sand-200 mt-3">
+            poesia que toca, acende e&nbsp;permanece
+          </span>
         </h1>
 
         {/* Autor */}
-        <p className="text-lg sm:text-xl text-sand-300 mb-8 tracking-wide">
+        <p className="text-lg sm:text-xl text-sand-300 mb-6 tracking-wide">
           por <span className="text-gold-400 font-semibold">Antônio Carlos Tótoro</span>
         </p>
 
-        {/* Citação */}
-        <blockquote className="max-w-2xl mx-auto mb-12">
+        {/* Subheadline */}
+        <p className="text-sand-200 text-base sm:text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
+          Um livro para quem gosta de sentir a linguagem na pele: delicada,
+          luminosa e, às vezes, intensa — como a própria&nbsp;vida.
+        </p>
+
+        {/* Micro-manifesto */}
+        <blockquote className="max-w-2xl mx-auto mb-4">
           <p className="font-serif text-xl sm:text-2xl md:text-3xl text-sand-100 italic leading-relaxed">
             &ldquo;Poesia é água-viva no mar das produções&nbsp;literárias.&rdquo;
           </p>
         </blockquote>
-
-        {/* Subcitação */}
-        <p className="text-sand-300 text-base sm:text-lg mb-12 max-w-xl mx-auto">
+        <p className="text-sand-300 text-base sm:text-lg mb-2 max-w-xl mx-auto italic">
           &ldquo;Poesia é bola de cristal, é vidro&nbsp;vivo…&rdquo;
+        </p>
+        <p className="text-sand-400 text-sm sm:text-base mb-12 max-w-xl mx-auto">
+          Uma leitura breve no tempo, longa no&nbsp;efeito.
         </p>
 
         {/* CTAs */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
           <a
             href="#comprar"
             className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold rounded-xl bg-gold-500 text-ocean-950 hover:bg-gold-400 transition-all shadow-lg hover:shadow-gold-500/25 hover:-translate-y-0.5"
@@ -55,15 +67,31 @@ export default function Hero() {
             Comprar agora
           </a>
           <a
-            href="#degustacao"
+            href="#videos"
             className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold rounded-xl border-2 border-sand-300/40 text-sand-100 hover:bg-sand-100/10 transition-all"
           >
-            Ler trechos
+            Ver vídeos musicados
           </a>
         </div>
 
+        {/* Badges */}
+        <div className="flex flex-wrap justify-center gap-4 mb-8">
+          <span className="inline-flex items-center gap-2 text-xs sm:text-sm text-sand-300 bg-ocean-800/60 rounded-full px-4 py-2 border border-ocean-700/40">
+            <BookOpen size={14} aria-hidden="true" />
+            Trechos para degustação
+          </span>
+          <span className="inline-flex items-center gap-2 text-xs sm:text-sm text-sand-300 bg-ocean-800/60 rounded-full px-4 py-2 border border-ocean-700/40">
+            <Play size={14} aria-hidden="true" />
+            Vídeos (Shorts) no site
+          </span>
+          <span className="inline-flex items-center gap-2 text-xs sm:text-sm text-sand-300 bg-ocean-800/60 rounded-full px-4 py-2 border border-ocean-700/40">
+            <MessageCircle size={14} aria-hidden="true" />
+            Contato direto com o autor
+          </span>
+        </div>
+
         {/* Scroll indicator */}
-        <div className="mt-16 animate-bounce">
+        <div className="mt-8 animate-bounce">
           <svg
             className="w-6 h-6 mx-auto text-sand-400"
             fill="none"

@@ -1,13 +1,13 @@
 import { Award } from "lucide-react";
 
 const CREDENCIAIS = [
-  "Ex-presidente da ARL (Academia Ribeirão-pretana de Letras)",
-  "Idealizador, fundador e ex-presidente da ARE (Academia Ribeirão-pretana de Educação)",
-  "Ex-membro da ALARP; membro da CPERP",
-  "Ex-membro da UBE e UBT",
-  "Membro fundador da ALAJ",
-  "Membro de academias e casas culturais (Anápolis-GO; Pindamonhangaba; Itaperuna etc.)",
-  "Diretor do Grupo Amigos da Fotografia",
+  { texto: "Ex-presidente da ARL (Academia Ribeirão-pretana de Letras)", destaque: "ARL" },
+  { texto: "Idealizador, fundador e ex-presidente da ARE (Academia Ribeirão-pretana de Educação)", destaque: "ARE" },
+  { texto: "Ex-membro da ALARP; membro da CPERP", destaque: "ALARP / CPERP" },
+  { texto: "Ex-membro da UBE e UBT", destaque: "UBE / UBT" },
+  { texto: "Membro fundador da ALAJ", destaque: "ALAJ" },
+  { texto: "Membro de academias e casas culturais (Anápolis-GO; Pindamonhangaba; Itaperuna etc.)", destaque: "" },
+  { texto: "Diretor do Grupo Amigos da Fotografia", destaque: "Amigos da Fotografia" },
 ];
 
 export default function AuthorSection() {
@@ -33,9 +33,10 @@ export default function AuthorSection() {
 
         <div className="max-w-3xl mx-auto text-center mb-12">
           <p className="text-lg text-ocean-800 leading-relaxed">
-            Poeta, educador e líder cultural com décadas de atuação
-            em instituições literárias e acadêmicas.
-            Uma vida dedicada às letras e à cultura brasileira.
+            Antônio Carlos Tótoro constrói sua trajetória em torno da palavra,
+            da educação e da cultura. Sua atuação em instituições literárias e
+            educacionais reforça um compromisso contínuo com a formação, a
+            produção e a valorização do trabalho&nbsp;artístico.
           </p>
         </div>
 
@@ -53,10 +54,17 @@ export default function AuthorSection() {
                   className="mt-1 w-2 h-2 rounded-full bg-gold-500 shrink-0"
                   aria-hidden="true"
                 />
-                <span className="text-ocean-800 text-base">{item}</span>
+                <span className="text-ocean-800 text-base">{item.texto}</span>
               </li>
             ))}
           </ul>
+        </div>
+
+        {/* Selo / Mini-frase */}
+        <div className="text-center mt-14">
+          <p className="inline-block font-serif text-lg sm:text-xl text-ocean-900 font-semibold border-t-2 border-b-2 border-gold-500/40 py-3 px-6">
+            Literatura, educação e cultura — uma vida dedicada à&nbsp;palavra.
+          </p>
         </div>
       </div>
     </section>

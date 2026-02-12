@@ -61,10 +61,15 @@ export default function VideoGallery() {
             </span>
           </div>
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-ocean-950 mb-6">
-            Poesia em movimento
+            Vídeos musicados — poesia em movimento
           </h2>
-          <p className="text-ocean-700 text-lg max-w-xl mx-auto">
-            Assista aos Shorts do canal do autor — poesia acompanhada de música e imagem.
+          <p className="text-ocean-700 text-lg max-w-2xl mx-auto mb-4">
+            Assista aos poemas musicados diretamente aqui no site. Uma forma
+            diferente de entrar no universo do livro: pelo ritmo, pela imagem
+            e pela voz do&nbsp;verso.
+          </p>
+          <p className="font-serif text-ocean-600 italic text-base">
+            Dê play — e deixe a poesia te&nbsp;encontrar.
           </p>
           <div className="w-16 h-1 bg-gold-500 mx-auto rounded-full mt-6" />
         </div>
