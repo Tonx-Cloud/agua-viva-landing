@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, FormEvent } from "react";
-import { X, Mail, Send, ShoppingCart, Info, Gift } from "lucide-react";
+import { useState, FormEvent, useEffect, useCallback } from "react";
+import { X, Mail, Send, ShoppingCart, Info, Gift, MessageCircle, Check } from "lucide-react";
 
 const EMAIL = "ancartor@yahoo.com";
 const FORMSUBMIT_URL = `https://formsubmit.co/${EMAIL}`;
@@ -32,20 +32,97 @@ export default function BuyModal() {
   const [mensagem, setMensagem] = useState(
     "Olá! Quero comprar o livro Água-Viva.\nGostaria de saber sobre: (valor / entrega / dedicatória).\nObrigado!"
   );
+  const [enviado, setEnviado] = useState<"email" | "whatsapp" | "form" | null>(null);
 
+  // Fechar com ESC
+  const handleEsc = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    },
+    []
+  );
+
+  useEffect(() => {
+    if (open) {
+      document.addEventListener("keydown", handleEsc);
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.removeEventListener("keydown", handleEsc);
+      document.body.style.overflow = "";
+    };
+  }, [open, handleEsc]);
+
+  // Validação simples
+  const camposValidos = nome.trim().length > 0 && email.trim().length > 0 && email.includes("@");
+
+  // Montar corpo da mensagem
+  const montarMensagem = () => {
+    const partes = [
+      `Olá, Antônio Carlos!`,
+      ``,
+      `Meu nome é ${nome}.`,
+      `E-mail: ${email}`,
+    ];
+    if (cidade.trim()) partes.push(`Cidade/UF: ${cidade}`);
+    partes.push(``);
+    if (mensagem.trim()) partes.push(mensagem.trim());
+    partes.push(``);
+    partes.push(`Aguardo retorno. Obrigado(a)!`);
+    return partes.join("\n");
+  };
+
+  // === ENVIAR POR E-MAIL (mailto) ===
   const handleMailto = () => {
-    const subject = encodeURIComponent(
-      "Pedido / Contato — Livro Água-Viva"
-    );
-    const body = encodeURIComponent(
-      `Olá, Antônio Carlos!\n\nMeu nome é ${nome}.\nE-mail: ${email}\n${cidade ? `Cidade/UF: ${cidade}\n` : ""}\n${mensagem}\n\nAguardo retorno. Obrigado(a)!`
-    );
-    window.open(`mailto:${EMAIL}?subject=${subject}&body=${body}`, "_self");
+    if (!camposValidos) return;
+
+    const subject = "Pedido / Contato — Livro Água-Viva";
+    const body = montarMensagem();
+
+    // Usar location.href é mais confiável que window.open para mailto
+    const mailtoUrl = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoUrl;
+
+    setEnviado("email");
+    setTimeout(() => setEnviado(null), 5000);
   };
 
-  const handleSubmitForm = (e: FormEvent<HTMLFormElement>) => {
-    e.currentTarget.submit();
+  // === ENVIAR POR WHATSAPP ===
+  const handleWhatsApp = () => {
+    if (!camposValidos) return;
+
+    const texto = `*Pedido / Contato — Livro Água-Viva*\n\n${montarMensagem()}`;
+
+    // WhatsApp Web / App — sem número fixo, abre para o usuário escolher ou enviar ao autor
+    // Se o autor tiver WhatsApp, pode colocar o número aqui:
+    // const whatsappUrl = `https://wa.me/5516999999999?text=${encodeURIComponent(texto)}`;
+    // Sem número, usa o compartilhamento genérico:
+    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(texto)}`;
+
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+
+    setEnviado("whatsapp");
+    setTimeout(() => setEnviado(null), 5000);
   };
+
+  // === ENVIAR VIA FORMSUBMIT ===
+  const handleSubmitForm = (e: FormEvent<HTMLFormElement>) => {
+    // O formsubmit.co lida com o POST nativamente
+    // Não precisamos de preventDefault — deixamos o form submeter
+    setEnviado("form");
+  };
+
+  // Feedback de sucesso
+  const feedbackMsg =
+    enviado === "email"
+      ? "Seu app de e-mail foi aberto com a mensagem pronta. Basta enviar!"
+      : enviado === "whatsapp"
+        ? "WhatsApp aberto! Escolha o contato do autor e envie."
+        : enviado === "form"
+          ? "Formulário enviado com sucesso!"
+          : null;
 
   return (
     <>
@@ -116,7 +193,7 @@ export default function BuyModal() {
           />
 
           {/* Conteúdo */}
-          <div className="relative bg-white rounded-3xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-8">
+          <div className="relative bg-white rounded-3xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8">
             <button
               onClick={() => setOpen(false)}
               className="absolute top-4 right-4 text-ocean-400 hover:text-ocean-700 transition-colors p-1"
@@ -129,8 +206,16 @@ export default function BuyModal() {
               Pedido / Contato — Livro Água-Viva
             </h3>
             <p className="text-ocean-600 text-sm mb-6">
-              Preencha seus dados e envie sua solicitação ao autor.
+              Preencha seus dados e escolha como enviar sua&nbsp;mensagem.
             </p>
+
+            {/* Feedback de sucesso */}
+            {feedbackMsg && (
+              <div className="mb-4 flex items-start gap-2 bg-green-50 border border-green-200 text-green-800 rounded-xl p-4 text-sm">
+                <Check size={18} className="shrink-0 mt-0.5" aria-hidden="true" />
+                <span>{feedbackMsg}</span>
+              </div>
+            )}
 
             <form
               action={FORMSUBMIT_URL}
@@ -145,14 +230,15 @@ export default function BuyModal() {
                 name="_subject"
                 value="Pedido / Contato — Livro Água-Viva"
               />
-              <input type="text" name="_honey" className="hidden" />
+              <input type="text" name="_honey" className="hidden" tabIndex={-1} autoComplete="off" />
+              <input type="hidden" name="_next" value="https://agua-viva-landing.vercel.app/?enviado=1" />
 
               <div>
                 <label
                   htmlFor="nome"
                   className="block text-sm font-semibold text-ocean-800 mb-1"
                 >
-                  Nome completo *
+                  Nome completo <span className="text-red-500">*</span>
                 </label>
                 <input
                   id="nome"
@@ -162,7 +248,7 @@ export default function BuyModal() {
                   value={nome}
                   onChange={(e) => setNome(e.target.value)}
                   className="w-full rounded-xl border border-sand-300 px-4 py-3 text-ocean-900 focus:border-ocean-500 focus:ring-2 focus:ring-ocean-200 transition-colors"
-                  placeholder="Seu nome"
+                  placeholder="Seu nome completo"
                 />
               </div>
 
@@ -171,7 +257,7 @@ export default function BuyModal() {
                   htmlFor="email-campo"
                   className="block text-sm font-semibold text-ocean-800 mb-1"
                 >
-                  E-mail *
+                  E-mail <span className="text-red-500">*</span>
                 </label>
                 <input
                   id="email-campo"
@@ -221,24 +307,47 @@ export default function BuyModal() {
                 />
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={handleMailto}
-                  className="flex-1 inline-flex items-center justify-center gap-2 py-3.5 px-6 bg-ocean-600 text-white rounded-xl font-semibold hover:bg-ocean-700 transition-colors"
-                >
-                  <Mail size={18} aria-hidden="true" />
-                  Enviar por e-mail
-                </button>
+              {/* 3 botões de envio */}
+              <div className="space-y-3 pt-2">
+                {/* Linha 1: E-mail + WhatsApp */}
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <button
+                    type="button"
+                    onClick={handleMailto}
+                    disabled={!camposValidos}
+                    className="flex-1 inline-flex items-center justify-center gap-2 py-3.5 px-5 bg-ocean-600 text-white rounded-xl font-semibold hover:bg-ocean-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <Mail size={18} aria-hidden="true" />
+                    Enviar por e-mail
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleWhatsApp}
+                    disabled={!camposValidos}
+                    className="flex-1 inline-flex items-center justify-center gap-2 py-3.5 px-5 bg-green-600 text-white rounded-xl font-semibold hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <MessageCircle size={18} aria-hidden="true" />
+                    Enviar por WhatsApp
+                  </button>
+                </div>
+
+                {/* Linha 2: Formulário */}
                 <button
                   type="submit"
-                  className="flex-1 inline-flex items-center justify-center gap-2 py-3.5 px-6 bg-gold-500 text-ocean-950 rounded-xl font-semibold hover:bg-gold-400 transition-colors"
+                  disabled={!camposValidos}
+                  className="w-full inline-flex items-center justify-center gap-2 py-3.5 px-6 bg-gold-500 text-ocean-950 rounded-xl font-semibold hover:bg-gold-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Send size={18} aria-hidden="true" />
-                  Enviar formulário
+                  Enviar formulário direto
                 </button>
               </div>
             </form>
+
+            {!camposValidos && (nome.length > 0 || email.length > 0) && (
+              <p className="text-xs text-red-500 mt-2 text-center">
+                Preencha nome e e-mail válido para enviar.
+              </p>
+            )}
 
             <p className="text-xs text-ocean-400 mt-4 text-center">
               Ao enviar, você concorda em ser contatado pelo autor para
