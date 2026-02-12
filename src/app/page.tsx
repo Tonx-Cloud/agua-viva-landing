@@ -5,6 +5,7 @@ import QuoteBanner from "@/components/QuoteBanner";
 import Tasting from "@/components/Tasting";
 import VideoGallery from "@/components/VideoGallery";
 import AuthorSection from "@/components/AuthorSection";
+import BlogSection from "@/components/BlogSection";
 import BuyModal from "@/components/BuyModal";
 import Footer from "@/components/Footer";
 
@@ -21,6 +22,7 @@ export default function Home() {
         <VideoGallery />
         <QuoteBanner index={2} variant="dark" />
         <AuthorSection />
+        <BlogSection />
         <QuoteBanner index={3} variant="light" />
         <BuyModal />
       </main>
