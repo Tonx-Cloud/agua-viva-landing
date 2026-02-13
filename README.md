@@ -27,34 +27,50 @@ Acesse [http://localhost:3000](http://localhost:3000)
 
 ## Como adicionar/atualizar áudios
 
-### Método 1: Via Vercel Blob (Recomendado)
+### Método Recomendado: Hospedar na sua VM (mais controlável)
 
-1. Faça upload dos MP3s para Vercel Blob:
-   - Use o Dashboard Vercel: Project > Storage > Blob > Upload files
-   - Ou via CLI: `vercel blob put arquivo.mp3`
-   - Obtenha as URLs públicas dos arquivos.
+1. **Configure sua VM com Nginx/Apache** para servir os MP3s via HTTPS:
+   - Coloque os arquivos em `/var/www/audios/` (exemplo).
+   - Configure o servidor para aceitar Range requests e CORS.
 
-2. Atualize `src/data/audios.ts`:
-   - Substitua os `src` placeholders pelas URLs reais do Blob.
-   - Ajuste títulos, vozes, durações e notas se necessário.
+   Exemplo Nginx:
+   ```nginx
+   location /audios/ {
+     alias /var/www/audios/;
+     types { audio/mpeg mp3; }
+     add_header Access-Control-Allow-Origin "https://agua-viva-landing.vercel.app" always;
+     add_header Accept-Ranges bytes always;
+   }
+   ```
 
-3. Commit e deploy:
+2. **URLs das faixas**:
+   - AUD-20260212-WA0052.mp3 => https://seu-dominio.com/audios/AUD-20260212-WA0052.mp3
+   - AUD-20260212-WA0053.mp3 => https://seu-dominio.com/audios/AUD-20260212-WA0053.mp3
+   - etc.
+
+3. **Atualize `src/data/audios.ts`**:
+   - Substitua os `src` placeholders pelas URLs reais da sua VM.
+   - Exemplo:
+     ```ts
+     src: "https://seu-dominio.com/audios/AUD-20260212-WA0052.mp3"
+     ```
+
+4. **Commit e deploy**:
    ```bash
    git add .
-   git commit -m "feat: adicionar áudios via Blob"
+   git commit -m "feat: adicionar URLs reais dos áudios"
    vercel --prod
    ```
 
-### Método 2: Via API de Upload (Desenvolvimento)
+### Método Alternativo: Vercel Blob
 
-Para desenvolvimento, use a rota `/api/blob-upload`:
+- Use o Dashboard Vercel > Storage > Blob para upload.
+- Obtenha URLs públicas e substitua em `audios.ts`.
 
-```bash
-curl -X POST http://localhost:3000/api/blob-upload \
-  -F "file=@seu-arquivo.mp3"
-```
+### Método Desenvolvimento: Via API
 
-Isso retorna a URL do Blob. Atualize `audios.ts` com essa URL.
+- Use `/api/blob-upload` para upload via POST (form-data).
+- Retorna URL do Blob.
 
 **Nota**: Configure `BLOB_READ_WRITE_TOKEN` no `.env.local` para uploads.
 
@@ -93,18 +109,18 @@ O deploy será publicado em: https://agua-viva-landing.vercel.app
 ## Troubleshooting
 
 ### Erro 416 Range Not Satisfiable
-- **Causa**: Arquivos MP3 locais vazios, ponteiros Git LFS ou servidor não suporta range requests.
-- **Solução**: Migre para Vercel Blob (URLs externas). Não use arquivos em `/public/` para áudios grandes.
-- **Verificação**: Se em produção der 416, confirme que `src` em `audios.ts` são URLs válidas do Blob.
+- **Causa**: URLs placeholder não substituídas, arquivos locais vazios ou ponteiros LFS.
+- **Solução**: Hospede os MP3s na VM ou Vercel Blob e atualize `audios.ts` com URLs reais.
+- **Verificação**: Teste com `curl -I -H "Range: bytes=0-1023" <URL_DO_AUDIO>`. Deve retornar 206, não 416.
 
 ### Áudios não carregam
-- Verifique se as URLs do Blob são públicas e acessíveis.
+- Verifique se as URLs são HTTPS e acessíveis.
 - Use `preload="none"` nos `<audio>` para evitar downloads desnecessários.
 - Fallback: Se erro, mostra "Áudio temporariamente indisponível."
 
 ### Git LFS
 - Se arquivos eram rastreados por LFS, remova com `git lfs untrack "*.mp3"` e `git rm --cached`.
-- Evite LFS para áudios; use Blob.
+- Evite LFS para áudios; use hospedagem externa.
 
 ---
 

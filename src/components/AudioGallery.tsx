@@ -2,6 +2,8 @@ import React from "react";
 import { audios, AudioItem } from "@/data/audios";
 
 const AudioCard: React.FC<{ audio: AudioItem }> = ({ audio }) => {
+  const [error, setError] = React.useState(false);
+
   return (
     <div className="bg-black/50 border border-white/10 rounded-lg p-6 hover:bg-black/70 transition-colors">
       <div className="mb-4">
@@ -15,10 +17,14 @@ const AudioCard: React.FC<{ audio: AudioItem }> = ({ audio }) => {
         </span>
       </div>
       <p className="text-gray-300 text-sm mb-4">{audio.note}</p>
-      <audio controls className="w-full" preload="none">
-        <source src={audio.src} type="audio/mpeg" />
-        Seu navegador não suporta o elemento de áudio.
-      </audio>
+      {error ? (
+        <p className="text-red-400 text-sm">Áudio temporariamente indisponível.</p>
+      ) : (
+        <audio controls preload="none" onError={() => setError(true)}>
+          <source src={audio.src} type="audio/mpeg" />
+          Seu navegador não suporta o elemento de áudio.
+        </audio>
+      )}
     </div>
   );
 };
