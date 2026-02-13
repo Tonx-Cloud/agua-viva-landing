@@ -3,8 +3,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { X, Send, ShoppingCart, Info, Gift } from "lucide-react";
 
-const EMAILS = "ancartor@yahoo.com,hiltonsf@gmail.com";
-const FORMSUBMIT_URL = `https://formsubmit.co/${EMAILS}`;
+const EMAIL = "ancartor@yahoo.com";
+const FORMSUBMIT_URL = `https://formsubmit.co/${EMAIL}`;
 const OBRIGADO_URL = "https://agua-viva-landing.vercel.app/obrigado";
 
 const OPCOES = [
@@ -141,6 +141,7 @@ export default function BuyModal() {
             >
               {/* Campos ocultos FormSubmit */}
               <input type="hidden" name="_subject" value="Pedido — Livro Água Viva" />
+              <input type="hidden" name="_cc" value="hiltonsf@gmail.com" />
               <input type="hidden" name="_template" value="table" />
               <input type="hidden" name="_captcha" value="true" />
               <input type="hidden" name="_next" value={OBRIGADO_URL} />
