@@ -143,7 +143,7 @@ export default function BuyModal() {
               <input type="hidden" name="_subject" value="Pedido — Livro Água Viva" />
               <input type="hidden" name="_cc" value="hiltonsf@gmail.com" />
               <input type="hidden" name="_template" value="table" />
-              <input type="hidden" name="_captcha" value="true" />
+              <input type="hidden" name="_captcha" value="false" />
               <input type="hidden" name="_next" value={OBRIGADO_URL} />
               <input
                 type="text"
