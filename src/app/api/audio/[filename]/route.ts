@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const VM_BASE = "http://34.9.51.163/audios";
+const VM_BASE = process.env.AUDIO_VM_URL ?? "http://34.9.51.163/audios";
 
 const ALLOWED_FILES = new Set([
   "audio-01.mpeg",
