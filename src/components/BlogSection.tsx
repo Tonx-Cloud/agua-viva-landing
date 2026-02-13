@@ -25,7 +25,7 @@ export default function BlogSection() {
 
         <div className="max-w-2xl mx-auto text-center mb-10">
           <p className="text-lg text-ocean-800 leading-relaxed mb-4">
-            A poesia de Antônio Carlos Tótoro não vive apenas nos livros.
+            A poesia de Antonio Carlos Tórtoro não vive apenas nos livros.
             Ela continua, respira e se renova em seu blog diário — um espaço
             onde reflexões, versos e pensamentos ganham forma&nbsp;constante.
           </p>

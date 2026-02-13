@@ -26,14 +26,14 @@ export default function AuthorSection() {
             </span>
           </div>
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-ocean-950 mb-6">
-            Antônio Carlos Tótoro
+            Antonio Carlos Tórtoro
           </h2>
           <div className="w-16 h-1 bg-gold-500 mx-auto rounded-full" />
         </div>
 
         <div className="max-w-3xl mx-auto text-center mb-12">
           <p className="text-lg text-ocean-800 leading-relaxed">
-            Antônio Carlos Tótoro constrói sua trajetória em torno da palavra,
+            Antonio Carlos Tórtoro constrói sua trajetória em torno da palavra,
             da educação e da cultura. Sua atuação em instituições literárias e
             educacionais reforça um compromisso contínuo com a formação, a
             produção e a valorização do trabalho&nbsp;artístico.

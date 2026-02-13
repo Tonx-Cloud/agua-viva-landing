@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="mx-auto max-w-5xl px-4 sm:px-6 text-center">
         <p className="font-serif text-xl text-sand-100 mb-4">Água-Viva</p>
         <p className="text-sand-400 text-sm mb-4">
-          Antônio Carlos Tótoro &copy; {ano}. Todos os direitos reservados.
+          Antonio Carlos Tórtoro &copy; {ano}. Todos os direitos reservados.
         </p>
         <p className="text-sand-500 text-xs flex items-center justify-center gap-1">
           Feito com{" "}

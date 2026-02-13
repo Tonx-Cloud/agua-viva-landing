@@ -97,7 +97,7 @@ def main():
             f'    id: "{sanitize_ts_string(audio["id"])}",',
             f'    title: "{sanitize_ts_string(title)}",',
             f'    poem: "{sanitize_ts_string(poem)}",',
-            f'    author: "{sanitize_ts_string(audio.get("author", "Antônio Carlos Tótoro"))}",',
+            f'    author: "{sanitize_ts_string(audio.get("author", "Antonio Carlos Tórtoro"))}",',
             f'    voice: "{sanitize_ts_string(audio.get("voice", "Voz do projeto"))}",',
             f'    duration: "{sanitize_ts_string(audio.get("duration", "00:00"))}",',
             f'    note: "{sanitize_ts_string(audio.get("note", ""))}",',

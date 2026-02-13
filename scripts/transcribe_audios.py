@@ -58,12 +58,13 @@ def clean_text(text: str) -> str:
 def normalize_author(name: str) -> str:
     """Padroniza variações do nome do autor."""
     variations = [
-        r'ant[oô]nio\s+carlos\s+t[oó]t?oro',
+        r'ant[oô]nio\s+carlos\s+t[oó]r?t?[ao]ro',
         r'ant[oô]nio\s+carlos\s+tortoro',
+        r'antonio\s+carlos\s+tórtoro',
     ]
     for pattern in variations:
         if re.search(pattern, name, re.IGNORECASE):
-            return "Antônio Carlos Tótoro"
+            return "Antonio Carlos Tórtoro"
     return name
 
 
@@ -81,9 +82,10 @@ def extract_poem_and_author(transcript_text: str) -> tuple[str, str]:
 
     # Procurar pelo autor
     author_patterns = [
-        r'(?:de|por|autor[a]?)\s+(Ant[oô]nio\s+Carlos\s+T[oó]t?oro)',
-        r'(Ant[oô]nio\s+Carlos\s+T[oó]t?oro)',
+        r'(?:de|por|autor[a]?)\s+(Ant[oô]nio\s+Carlos\s+T[oó]r?t?[ao]ro)',
+        r'(Ant[oô]nio\s+Carlos\s+T[oó]r?t?[ao]ro)',
         r'(Ant[oô]nio\s+Carlos\s+Tortoro)',
+        r'(Antonio\s+Carlos\s+Tórtoro)',
     ]
     for pat in author_patterns:
         m = re.search(pat, opening_clean, re.IGNORECASE)

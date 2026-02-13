@@ -42,7 +42,7 @@ export default function Hero() {
 
         {/* Autor */}
         <p className="text-lg sm:text-xl text-sand-300 mb-6 tracking-wide">
-          por <span className="text-gold-400 font-semibold">Antônio Carlos Tótoro</span>
+          por <span className="text-gold-400 font-semibold">Antonio Carlos Tórtoro</span>
         </p>
 
         {/* Subheadline */}

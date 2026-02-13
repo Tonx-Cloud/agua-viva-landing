@@ -1,6 +1,6 @@
 # Água Viva — Landing Page
 
-> Landing page premium para o livro "Água Viva" de Antônio Carlos Tótoro.
+> Landing page premium para o livro "Água Viva" de Antonio Carlos Tórtoro.
 >
 > Stack: Next.js (App Router) + TypeScript + Tailwind CSS
 
@@ -98,12 +98,12 @@ Browser (HTTPS) → Vercel /api/audio/audio-01.mpeg → VM HTTP 34.9.51.163/audi
 
 | # | Arquivo | Poema | Autor | Duração |
 |---|---------|-------|-------|---------|
-| 1 | audio-01.mpeg | Forma de Amar | Antônio Carlos Tótoro | 01:35 |
-| 2 | audio-02.mpeg | Bala Perdida | Antônio Carlos Tótoro | 01:17 |
-| 3 | audio-03.mpeg | Louvado Seja o Senhor | Antônio Carlos Tótoro | 02:09 |
-| 4 | audio-04.mpeg | Cócoras | Antônio Carlos Tótoro | 02:13 |
-| 5 | audio-05.mpeg | Natal | Antônio Carlos Tótoro | 01:37 |
-| 6 | audio-06.mpeg | Mariana | Antônio Carlos Tótoro | 01:07 |
+| 1 | audio-01.mpeg | Forma de Amar | Antonio Carlos Tórtoro | 01:35 |
+| 2 | audio-02.mpeg | Bala Perdida | Antonio Carlos Tórtoro | 01:17 |
+| 3 | audio-03.mpeg | Louvado Seja o Senhor | Antonio Carlos Tórtoro | 02:09 |
+| 4 | audio-04.mpeg | Cócoras | Antonio Carlos Tórtoro | 02:13 |
+| 5 | audio-05.mpeg | Natal | Antonio Carlos Tórtoro | 01:37 |
+| 6 | audio-06.mpeg | Mariana | Antonio Carlos Tórtoro | 01:07 |
 
 ---
 

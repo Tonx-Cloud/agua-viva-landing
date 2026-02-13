@@ -73,7 +73,7 @@ export default function Tasting() {
 
               <div className="mt-6 pt-4 border-t border-ocean-700/40">
                 <p className="text-sm text-sand-400">
-                  — Antônio Carlos Tótoro
+                  — Antonio Carlos Tórtoro
                 </p>
               </div>
             </article>
