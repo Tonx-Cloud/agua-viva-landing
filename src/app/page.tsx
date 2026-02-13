@@ -4,6 +4,7 @@ import AboutBook from "@/components/AboutBook";
 import QuoteBanner from "@/components/QuoteBanner";
 import Tasting from "@/components/Tasting";
 import VideoGallery from "@/components/VideoGallery";
+import AudiobookSection from "@/components/AudiobookSection";
 import AuthorSection from "@/components/AuthorSection";
 import BlogSection from "@/components/BlogSection";
 import BuyModal from "@/components/BuyModal";
@@ -19,6 +20,7 @@ export default function Home() {
         <QuoteBanner index={0} variant="dark" />
         <Tasting />
         <QuoteBanner index={1} variant="light" />
+        <AudiobookSection />
         <VideoGallery />
         <QuoteBanner index={2} variant="dark" />
         <AuthorSection />
