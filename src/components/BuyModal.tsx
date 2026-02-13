@@ -1,11 +1,9 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { X, Send, ShoppingCart, Info, Gift } from "lucide-react";
+import { X, Send, ShoppingCart, Info, Gift, Loader2 } from "lucide-react";
 
-const EMAIL = "hiltonsf@gmail.com";
-const FORMSUBMIT_URL = `https://formsubmit.co/${EMAIL}`;
-const OBRIGADO_URL = "https://agua-viva-landing.vercel.app/obrigado";
+const OBRIGADO_URL = "/obrigado";
 
 const OPCOES = [
   {
@@ -27,6 +25,8 @@ const OPCOES = [
 
 export default function BuyModal() {
   const [open, setOpen] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
 
   // Fechar com ESC
   const handleEsc = useCallback(
@@ -135,16 +135,31 @@ export default function BuyModal() {
             </p>
 
             <form
-              action={FORMSUBMIT_URL}
-              method="POST"
+              onSubmit={async (e) => {
+                e.preventDefault();
+                setError("");
+                setSending(true);
+                const fd = new FormData(e.currentTarget);
+                const body = Object.fromEntries(fd.entries());
+                try {
+                  const res = await fetch("/api/contact", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(body),
+                  });
+                  if (!res.ok) {
+                    const data = await res.json().catch(() => ({}));
+                    throw new Error(data.error || "Erro ao enviar");
+                  }
+                  window.location.href = OBRIGADO_URL;
+                } catch (err: unknown) {
+                  setSending(false);
+                  setError(err instanceof Error ? err.message : "Erro ao enviar. Tente novamente.");
+                }
+              }}
               className="space-y-4"
             >
-              {/* Campos ocultos FormSubmit */}
-              <input type="hidden" name="_subject" value="Pedido — Livro Água Viva" />
-              <input type="hidden" name="_cc" value="ancartor@yahoo.com" />
-              <input type="hidden" name="_template" value="table" />
-              <input type="hidden" name="_captcha" value="false" />
-              <input type="hidden" name="_next" value={OBRIGADO_URL} />
+              {/* Honey-pot anti-spam (hidden) */}
               <input
                 type="text"
                 name="_honey"
@@ -245,12 +260,25 @@ export default function BuyModal() {
 
               {/* Botão de envio */}
               <div className="pt-2">
+                {error && (
+                  <p className="text-red-600 text-sm mb-3 text-center">{error}</p>
+                )}
                 <button
                   type="submit"
-                  className="w-full inline-flex items-center justify-center gap-2 py-4 px-6 bg-gold-500 text-ocean-950 rounded-xl font-bold text-lg hover:bg-gold-400 transition-colors shadow-lg hover:shadow-gold-500/30"
+                  disabled={sending}
+                  className="w-full inline-flex items-center justify-center gap-2 py-4 px-6 bg-gold-500 text-ocean-950 rounded-xl font-bold text-lg hover:bg-gold-400 transition-colors shadow-lg hover:shadow-gold-500/30 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  <Send size={20} aria-hidden="true" />
-                  Enviar pedido
+                  {sending ? (
+                    <>
+                      <Loader2 size={20} className="animate-spin" aria-hidden="true" />
+                      Enviando…
+                    </>
+                  ) : (
+                    <>
+                      <Send size={20} aria-hidden="true" />
+                      Enviar pedido
+                    </>
+                  )}
                 </button>
               </div>
             </form>

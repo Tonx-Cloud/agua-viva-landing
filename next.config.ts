@@ -12,7 +12,7 @@ const csp = [
   "style-src 'self' 'unsafe-inline'",
   "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
   "media-src 'self' blob: https:",
-  "frame-src https://www.youtube.com https://formsubmit.co",
+  "frame-src https://www.youtube.com",
   "connect-src 'self' https:",
   "upgrade-insecure-requests",
 ].join("; ");
