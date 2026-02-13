@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Água Viva — Landing Page
 
-## Getting Started
+> Landing page premium para o livro "Água Viva" de Antônio Carlos Tótoro.
+>
+> Stack: Next.js (App Router) + TypeScript + Tailwind CSS
 
-First, run the development server:
+---
+
+## Estrutura do Projeto
+
+- `src/app/` — páginas e layouts
+- `src/components/` — componentes React
+- `public/audio/` — arquivos MP3 para degustação sonora
+
+---
+
+## Como rodar local
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
+Acesse [http://localhost:3000](http://localhost:3000)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Como adicionar/atualizar áudios
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Coloque os arquivos MP3 reais em `public/audio/` (não use Git LFS)
+- Evite nomes com espaços, acentos ou parênteses. Exemplo: `mariana-declamacao-1.mp3`
+- Atualize os paths no componente `AudiobookSection.tsx` se necessário
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Deploy na Vercel
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+vercel --prod
+```
+O deploy será publicado em: https://agua-viva-landing.vercel.app
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Troubleshooting
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Erro 416 Range Not Satisfiable
+- Causa: arquivos MP3 rastreados por Git LFS ou arquivos 0 bytes
+- Solução: remova do LFS, coloque arquivos reais em `public/audio/`, padronize nomes
+- Não use LFS para áudios, pois Vercel não suporta streaming de ponteiros
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Links importantes
+
+- [Site em produção](https://agua-viva-landing.vercel.app)
+- [Blog do autor](https://tortoro.com.br/)
+- [Shorts do YouTube](https://www.youtube.com/@tortoro)
+
+---
+
+## Contato
+
+Para dúvidas ou sugestões, abra uma issue ou entre em contato pelo site.

@@ -25,14 +25,14 @@ export default function AboutBook() {
             </span>
           </div>
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-ocean-950 mb-6">
-            Sobre &ldquo;Água-Viva&rdquo;
+            Sobre &ldquo;Água Viva&rdquo;
           </h2>
           <div className="w-16 h-1 bg-gold-500 mx-auto rounded-full" />
         </div>
 
         <div className="max-w-3xl mx-auto mb-16">
           <p className="text-lg sm:text-xl text-ocean-800 leading-relaxed mb-6 text-center">
-            <em>Água-Viva</em> é poesia em estado sensível: pequena no tamanho
+            <em>Água Viva</em> é poesia em estado sensível: pequena no tamanho
             de cada verso, grande no que desperta. Uma obra que brinca com a
             transparência, o brilho e a força da palavra — ora suave,
             ora&nbsp;elétrica.

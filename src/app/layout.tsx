@@ -15,20 +15,20 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Água-Viva — Antônio Carlos Tótoro | Poesia",
+  title: "Água Viva — Antônio Carlos Tótoro | Poesia",
   description:
-    "Água-Viva: o novo livro de poesia de Antônio Carlos Tótoro. Poesia é água-viva no mar das produções literárias. Adquira já o seu exemplar.",
+    "Água Viva: o novo livro de poesia de Antônio Carlos Tótoro. Poesia é água viva no mar das produções literárias. Adquira já o seu exemplar.",
   keywords: [
-    "Água-Viva",
+    "Água Viva",
     "Antônio Carlos Tótoro",
     "poesia",
     "livro",
     "literatura brasileira",
   ],
   openGraph: {
-    title: "Água-Viva — Antônio Carlos Tótoro",
+    title: "Água Viva — Antônio Carlos Tótoro",
     description:
-      "Poesia é água-viva no mar das produções literárias. Conheça o novo livro de Antônio Carlos Tótoro.",
+      "Poesia é água viva no mar das produções literárias. Conheça o novo livro de Antônio Carlos Tótoro.",
     type: "website",
     locale: "pt_BR",
   },

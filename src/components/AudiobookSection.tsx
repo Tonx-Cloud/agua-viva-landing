@@ -1,12 +1,12 @@
 import React from "react";
 
 const audioTracks = [
-  "/audios/AUD-20260212-WA0052.mp3",
-  "/audios/AUD-20260212-WA0053.mp3",
-  "/audios/AUD-20260212-WA0054.mp3",
-  "/audios/AUD-20260212-WA0055.mp3",
-  "/audios/AUD-20260212-WA0056.mp3",
-  "/audios/MARIANA declamação  (1).mp3",
+  "/audio/AUD-20260212-WA0052.mp3",
+  "/audio/AUD-20260212-WA0053.mp3",
+  "/audio/AUD-20260212-WA0054.mp3",
+  "/audio/AUD-20260212-WA0055.mp3",
+  "/audio/AUD-20260212-WA0056.mp3",
+  "/audio/mariana-declamacao-1.mp3",
 ];
 
 export default function AudiobookSection() {
@@ -14,13 +14,13 @@ export default function AudiobookSection() {
     <section className="py-20 bg-black text-white">
       <div className="max-w-5xl mx-auto px-6 text-center">
         <h2 className="text-3xl md:text-4xl font-serif mb-6">
-          Água-Viva — Edição Lua
+          Água Viva — Edição Lua
         </h2>
         <p className="text-lg text-gray-300 mb-8">
           Há versos que precisam ser lidos.<br />E há versos que precisam ser ouvidos.
         </p>
         <p className="text-lg text-gray-400 mb-12">
-          Todos que adquirirem <strong>Água-Viva</strong> receberão acesso
+          Todos que adquirirem <strong>Água Viva</strong> receberão acesso
           exclusivo ao audiobook oficial — uma interpretação intimista,
           com cadência suave e presença emocional.
         </p>

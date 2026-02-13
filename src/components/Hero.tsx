@@ -28,7 +28,7 @@ export default function Hero() {
 
         {/* Título */}
         <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-sand-50 mb-6 leading-tight">
-          Água-Viva
+          Água Viva
           <span className="block text-2xl sm:text-3xl md:text-4xl font-normal text-sand-200 mt-3">
             poesia que toca, acende e&nbsp;permanece
           </span>
