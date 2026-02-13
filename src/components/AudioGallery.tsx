@@ -5,24 +5,47 @@ import { audios, AudioItem } from "@/data/audios";
 
 const AudioCard: React.FC<{ audio: AudioItem }> = ({ audio }) => {
   const [error, setError] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
 
   return (
-    <div className="bg-black/50 border border-white/10 rounded-lg p-6 hover:bg-black/70 transition-colors">
+    <div className="bg-black/50 border border-white/10 rounded-lg p-6 hover:bg-black/70 transition-colors flex flex-col">
       <div className="mb-4">
         <h3 className="text-xl font-semibold text-white mb-2">{audio.title}</h3>
-        {audio.poem && (
-          <p className="text-sm text-gray-400 mb-1">Poema: {audio.poem}</p>
+        {audio.poem && audio.poem !== "(não identificado)" && (
+          <p className="text-sm text-gray-400 mb-1">
+            Poema: <span className="text-white/80 italic">{audio.poem}</span>
+          </p>
+        )}
+        {audio.author && audio.author !== "(não identificado)" && (
+          <p className="text-sm text-gray-400 mb-1">
+            Autor: <span className="text-white/70">{audio.author}</span>
+          </p>
         )}
         <p className="text-sm text-gray-400 mb-2">Voz: {audio.voice}</p>
         <span className="inline-block bg-white/10 text-white text-xs rounded px-2 py-1">
           {audio.duration}
         </span>
       </div>
-      <p className="text-gray-300 text-sm mb-4">{audio.note}</p>
+      <p className="text-gray-300 text-sm mb-3 flex-grow">{audio.note}</p>
+      {audio.transcriptPreview && (
+        <div className="mb-4">
+          <button
+            onClick={() => setShowPreview(!showPreview)}
+            className="text-xs text-gray-500 hover:text-gray-300 transition-colors underline underline-offset-2"
+          >
+            {showPreview ? "Ocultar trecho" : "Ver trecho do poema"}
+          </button>
+          {showPreview && (
+            <p className="text-gray-400 text-xs mt-2 italic leading-relaxed border-l-2 border-white/10 pl-3">
+              &ldquo;{audio.transcriptPreview}&rdquo;
+            </p>
+          )}
+        </div>
+      )}
       {error ? (
         <p className="text-red-400 text-sm">Áudio temporariamente indisponível.</p>
       ) : (
-        <audio controls preload="none" onError={() => setError(true)}>
+        <audio controls preload="none" className="w-full" onError={() => setError(true)}>
           <source src={audio.src} type="audio/mpeg" />
           Seu navegador não suporta o elemento de áudio.
         </audio>

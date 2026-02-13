@@ -41,3 +41,11 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+
+# python
+.venv/
+__pycache__/
+*.pyc
+
+# áudios locais (grandes demais para Git)
+data/audio_inputs/
