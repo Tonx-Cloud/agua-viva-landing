@@ -205,13 +205,125 @@ O projeto inclui hardening baseado em OWASP Top 10:
 
 | Variável | Descrição | Obrigatória |
 |----------|-----------|-------------|
-| `AUDIO_VM_URL` | URL base da VM de áudios (ex: `http://IP/audios`) | Não (tem fallback) |
+| `AUDIO_VM_URL` | URL base da VM de áudios (ex: `http://IP/audios`) | **Sim** |
+| `AUDIO_BACKEND_TOKEN` | Token secreto para autenticação Vercel → VM | **Sim** |
 
 Configurar na Vercel:
 
 ```bash
 npx vercel env add AUDIO_VM_URL production
+npx vercel env add AUDIO_BACKEND_TOKEN production
 ```
+
+---
+
+## 🔒 Comunicação Segura Vercel → VM
+
+A rota `/api/audio/[filename]` faz proxy HTTPS→HTTP entre a Vercel e a VM de áudios.
+O canal é protegido por múltiplas camadas:
+
+### Arquitetura de Segurança
+
+```
+Browser (HTTPS)
+  │
+  ▼
+Vercel Edge (middleware rate-limit)
+  │
+  ▼
+/api/audio/[filename]  ←── whitelist, SSRF block, timeout, size limit
+  │
+  │  x-origin-token: AUDIO_BACKEND_TOKEN
+  ▼
+VM Google Cloud (Express)  ←── valida token, rate-limit, whitelist
+  │
+  ▼
+Arquivo .mpeg no disco
+```
+
+### Token de Autenticação (`AUDIO_BACKEND_TOKEN`)
+
+Toda requisição da Vercel para a VM inclui o header `x-origin-token`.
+A VM **rejeita com 401** qualquer request sem token ou com token inválido.
+
+**Como configurar:**
+
+1. Gere um token seguro:
+   ```bash
+   openssl rand -hex 32
+   ```
+
+2. Configure na Vercel:
+   ```bash
+   npx vercel env add AUDIO_BACKEND_TOKEN production
+   ```
+
+3. Configure na VM:
+   ```bash
+   export AUDIO_BACKEND_TOKEN="mesmo-token-da-vercel"
+   ```
+
+**Por que IP allowlist não é suficiente:**
+- A Vercel usa IPs dinâmicos no edge — não há range fixo confiável
+- Atacantes podem spoofar headers `X-Forwarded-For`
+- Um token compartilhado garante autenticidade independente de IP
+
+### Proteção SSRF
+
+| Proteção | Como funciona |
+|----------|---------------|
+| URL fixa via env var | `AUDIO_VM_URL` é a única origem — não aceita URL do cliente |
+| `new URL()` segura | Filename é montado via `new URL(filename, base)` com validação de origin |
+| Path-traversal block | Rejeita `..`, `/`, `\` no filename |
+| Redirect bloqueado | `fetch(..., { redirect: "manual" })` impede SSRF via redirect |
+| Whitelist rígida | Apenas 6 filenames específicos são aceitos |
+
+### Timeout e Limite de Tamanho
+
+| Proteção | Valor |
+|----------|-------|
+| Timeout | 15 segundos (AbortController) → retorna 504 |
+| Tamanho máximo | 15 MB — rejeita com 413 se `Content-Length` exceder |
+| Stream limitado | Se `Content-Length` ausente, corta stream em 15 MB |
+
+### HTTPS Recomendado
+
+Se `AUDIO_VM_URL` usa `http://`, um warning é emitido no console do servidor.
+Para migrar para HTTPS na VM:
+
+```bash
+# Instale o Certbot na VM
+sudo apt install certbot python3-certbot-nginx
+sudo certbot --nginx -d seu-dominio.com
+```
+
+### Servidor da VM (`infra/vm-audio-server.js`)
+
+O arquivo `infra/vm-audio-server.js` é um servidor Express pronto para deploy na VM:
+
+```bash
+# Na VM
+cd /opt/audio-server
+npm init -y
+npm install express express-rate-limit
+
+export AUDIO_BACKEND_TOKEN="seu-token"
+export AUDIO_DIR="/var/www/audios"
+
+# Com PM2
+pm2 start vm-audio-server.js --name audio-server
+
+# Ou diretamente
+node vm-audio-server.js
+```
+
+Funcionalidades:
+- Autenticação via `x-origin-token` (401 sem token)
+- Rate limiting: 60 req/min por IP
+- Whitelist de arquivos (não expõe diretório)
+- Suporte a Range requests (HTTP 206)
+- Health check em `/health`
+- Catch-all 404 para rotas não registradas
 
 ---
 
