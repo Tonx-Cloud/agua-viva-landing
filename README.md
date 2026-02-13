@@ -114,7 +114,7 @@ O modal de compra (`BuyModal.tsx`) envia os dados via [FormSubmit.co](https://fo
 ### Como funciona
 
 1. O visitante preenche **nome, e-mail, telefone/WhatsApp, cidade (opcional) e mensagem**.
-2. O formulário faz `POST` para `https://formsubmit.co/ancartor@yahoo.com`.
+2. O formulário faz `POST` para `https://formsubmit.co/hiltonsf@gmail.com`.
 3. O FormSubmit entrega o e-mail ao autor com todos os campos em formato de tabela.
 4. Após o envio, o visitante é redirecionado para `/obrigado`.
 
@@ -130,7 +130,7 @@ O modal de compra (`BuyModal.tsx`) envia os dados via [FormSubmit.co](https://fo
 
 ### Primeiro uso
 
-Na **primeira submissão**, o FormSubmit envia um e-mail de confirmação para `ancartor@yahoo.com`. O autor precisa clicar no link de ativação. Depois disso, todos os formulários são entregues normalmente.
+Na **primeira submissão**, o FormSubmit envia um e-mail de confirmação para `hiltonsf@gmail.com`. É preciso clicar no link de ativação. Depois disso, todos os formulários são entregues normalmente.
 
 ### Alterar e-mail de destino
 
