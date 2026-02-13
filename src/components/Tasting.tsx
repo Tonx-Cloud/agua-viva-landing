@@ -36,9 +36,8 @@ export default function Tasting() {
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-sand-50 mb-6">
             Degustação — trechos selecionados
           </h2>
-          <p className="text-sand-300 text-lg max-w-xl mx-auto mb-6">
-            Um gosto do que te espera no <em>Livro Água Viva</em>. Trechos breves,
-            para sentir a textura da&nbsp;escrita.
+          <p className="font-serif text-ocean-400 italic text-base sm:text-lg mb-6">
+            e deixe a poesia encontrar&nbsp;você.
           </p>
           <div className="w-16 h-1 bg-gold-500 mx-auto rounded-full" />
         </div>
