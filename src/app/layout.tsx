@@ -15,7 +15,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Água Viva — Antônio Carlos Tótoro | Poesia",
+  title: "Água Viva — Livro de poemas | Antônio Carlos Tótoro",
   description:
     "Água Viva: o novo livro de poesia de Antônio Carlos Tótoro. Poesia é água viva no mar das produções literárias. Adquira já o seu exemplar.",
   keywords: [
