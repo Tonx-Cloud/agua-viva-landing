@@ -107,6 +107,41 @@ Browser (HTTPS) → Vercel /api/audio/audio-01.mpeg → VM HTTP 34.9.51.163/audi
 
 ---
 
+## Formulário de Contato / Compra
+
+O modal de compra (`BuyModal.tsx`) envia os dados via [FormSubmit.co](https://formsubmit.co/) — sem backend próprio.
+
+### Como funciona
+
+1. O visitante preenche **nome, e-mail, telefone/WhatsApp, cidade (opcional) e mensagem**.
+2. O formulário faz `POST` para `https://formsubmit.co/ancartor@yahoo.com`.
+3. O FormSubmit entrega o e-mail ao autor com todos os campos em formato de tabela.
+4. Após o envio, o visitante é redirecionado para `/obrigado`.
+
+### Campos ocultos configurados
+
+| Campo | Valor | Descrição |
+|-------|-------|-----------|
+| `_subject` | `Pedido — Livro Água Viva` | Assunto do e-mail |
+| `_template` | `table` | Layout do e-mail em tabela |
+| `_captcha` | `true` | CAPTCHA anti-spam do FormSubmit |
+| `_next` | URL de `/obrigado` | Redirecionamento pós-envio |
+| `_honey` | (vazio, oculto) | Honeypot anti-bot |
+
+### Primeiro uso
+
+Na **primeira submissão**, o FormSubmit envia um e-mail de confirmação para `ancartor@yahoo.com`. O autor precisa clicar no link de ativação. Depois disso, todos os formulários são entregues normalmente.
+
+### Alterar e-mail de destino
+
+Edite a constante `EMAIL` em `src/components/BuyModal.tsx`:
+
+```typescript
+const EMAIL = "novo-email@exemplo.com";
+```
+
+---
+
 ## Deploy
 
 ```bash

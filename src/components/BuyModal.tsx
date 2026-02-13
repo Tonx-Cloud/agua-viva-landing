@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, FormEvent, useEffect, useCallback, useRef } from "react";
-import { X, Mail, Send, ShoppingCart, Info, Gift, MessageCircle, Check, Copy, AlertTriangle } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { X, Send, ShoppingCart, Info, Gift } from "lucide-react";
 
 const EMAIL = "ancartor@yahoo.com";
 const FORMSUBMIT_URL = `https://formsubmit.co/${EMAIL}`;
+const OBRIGADO_URL = "https://agua-viva-landing.vercel.app/obrigado";
 
 const OPCOES = [
   {
@@ -26,15 +27,6 @@ const OPCOES = [
 
 export default function BuyModal() {
   const [open, setOpen] = useState(false);
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-  const [cidade, setCidade] = useState("");
-  const [mensagem, setMensagem] = useState(
-    "Olá! Quero comprar o livro Água-Viva.\nGostaria de saber sobre: (valor / entrega / dedicatória).\nObrigado!"
-  );
-  const [enviado, setEnviado] = useState<"email" | "whatsapp" | "form" | "copiado" | null>(null);
-  const [mailtoFalhou, setMailtoFalhou] = useState(false);
-  const mailtoRef = useRef<HTMLAnchorElement>(null);
 
   // Fechar com ESC
   const handleEsc = useCallback(
@@ -57,124 +49,6 @@ export default function BuyModal() {
     };
   }, [open, handleEsc]);
 
-  // Validação simples
-  const camposValidos = nome.trim().length > 0 && email.trim().length > 0 && email.includes("@");
-
-  // Montar corpo da mensagem (com CRLF para mailto RFC 6068)
-  const montarMensagem = (useCRLF = false) => {
-    const lb = useCRLF ? "\r\n" : "\n";
-    const partes = [
-      `Olá, Antônio Carlos!`,
-      ``,
-      `Meu nome é ${nome}.`,
-      `E-mail: ${email}`,
-    ];
-    if (cidade.trim()) partes.push(`Cidade/UF: ${cidade}`);
-    partes.push(``);
-    if (mensagem.trim()) partes.push(mensagem.trim().replace(/\n/g, lb));
-    partes.push(``);
-    partes.push(`Aguardo retorno. Obrigado(a)!`);
-    return partes.join(lb);
-  };
-
-  // Montar URL mailto
-  const buildMailtoUrl = () => {
-    const subject = "Pedido / Contato - Livro Agua-Viva";
-    const body = montarMensagem(true);
-    return `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  };
-
-  // Copiar mensagem para clipboard (fallback)
-  const handleCopiar = async () => {
-    const texto = `Para: ${EMAIL}\nAssunto: Pedido / Contato - Livro Agua-Viva\n\n${montarMensagem(false)}`;
-    try {
-      await navigator.clipboard.writeText(texto);
-      setEnviado("copiado");
-      setTimeout(() => setEnviado(null), 5000);
-    } catch {
-      // Fallback para browsers antigos
-      const ta = document.createElement("textarea");
-      ta.value = texto;
-      ta.style.position = "fixed";
-      ta.style.opacity = "0";
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand("copy");
-      document.body.removeChild(ta);
-      setEnviado("copiado");
-      setTimeout(() => setEnviado(null), 5000);
-    }
-  };
-
-  // === ENVIAR POR E-MAIL (mailto via <a> programático) ===
-  const handleMailto = () => {
-    if (!camposValidos) return;
-
-    // Técnica: criar <a> invisível e clicar — mais confiável que location.href
-    const link = document.createElement("a");
-    link.href = buildMailtoUrl();
-    link.style.display = "none";
-    document.body.appendChild(link);
-    link.click();
-
-    // Detectar se mailto funcionou: se após 2s a página não perdeu foco,
-    // o client de e-mail provavelmente não abriu
-    let mailtoAbriu = false;
-    const onBlur = () => { mailtoAbriu = true; };
-    window.addEventListener("blur", onBlur);
-
-    setTimeout(() => {
-      window.removeEventListener("blur", onBlur);
-      document.body.removeChild(link);
-
-      if (mailtoAbriu) {
-        setEnviado("email");
-        setMailtoFalhou(false);
-        setTimeout(() => setEnviado(null), 6000);
-      } else {
-        // Mailto não abriu — mostrar fallback
-        setMailtoFalhou(true);
-      }
-    }, 2500);
-  };
-
-  // === ENVIAR POR WHATSAPP ===
-  const handleWhatsApp = () => {
-    if (!camposValidos) return;
-
-    const texto = `*Pedido / Contato — Livro Água-Viva*\n\n${montarMensagem()}`;
-
-    // WhatsApp Web / App — sem número fixo, abre para o usuário escolher ou enviar ao autor
-    // Se o autor tiver WhatsApp, pode colocar o número aqui:
-    // const whatsappUrl = `https://wa.me/5516999999999?text=${encodeURIComponent(texto)}`;
-    // Sem número, usa o compartilhamento genérico:
-    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(texto)}`;
-
-    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
-
-    setEnviado("whatsapp");
-    setTimeout(() => setEnviado(null), 5000);
-  };
-
-  // === ENVIAR VIA FORMSUBMIT ===
-  const handleSubmitForm = (e: FormEvent<HTMLFormElement>) => {
-    // O formsubmit.co lida com o POST nativamente
-    // Não precisamos de preventDefault — deixamos o form submeter
-    setEnviado("form");
-  };
-
-  // Feedback de sucesso
-  const feedbackMsg =
-    enviado === "email"
-      ? "Seu app de e-mail foi aberto com a mensagem pronta. Basta enviar!"
-      : enviado === "whatsapp"
-        ? "WhatsApp aberto! Escolha o contato do autor e envie."
-        : enviado === "form"
-          ? "Formulário enviado com sucesso!"
-          : enviado === "copiado"
-            ? `Mensagem copiada! Cole no seu e-mail e envie para ${EMAIL}`
-            : null;
-
   return (
     <>
       {/* Seção CTA Comprar */}
@@ -182,7 +56,7 @@ export default function BuyModal() {
         <div className="mx-auto max-w-4xl px-4 sm:px-6">
           <div className="text-center mb-12">
             <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-sand-50 mb-4">
-              Leve &ldquo;Água-Viva&rdquo; para a sua estante
+              Leve &ldquo;Água Viva&rdquo; para a sua estante
             </h2>
             <p className="text-sand-300 text-lg max-w-lg mx-auto">
               Quer comprar, tirar dúvidas, pedir dedicatória ou combinar
@@ -254,70 +128,31 @@ export default function BuyModal() {
             </button>
 
             <h3 className="font-serif text-2xl font-bold text-ocean-950 mb-2">
-              Pedido / Contato — Livro Água-Viva
+              Pedido / Contato — Livro Água Viva
             </h3>
             <p className="text-ocean-600 text-sm mb-6">
-              Preencha seus dados e escolha como enviar sua&nbsp;mensagem.
+              Preencha seus dados e envie sua mensagem diretamente ao&nbsp;autor.
             </p>
-
-            {/* Feedback de sucesso */}
-            {feedbackMsg && (
-              <div className="mb-4 flex items-start gap-2 bg-green-50 border border-green-200 text-green-800 rounded-xl p-4 text-sm">
-                <Check size={18} className="shrink-0 mt-0.5" aria-hidden="true" />
-                <span>{feedbackMsg}</span>
-              </div>
-            )}
-
-            {/* Fallback: mailto não abriu */}
-            {mailtoFalhou && (
-              <div className="mb-4 bg-amber-50 border border-amber-200 rounded-xl p-4">
-                <div className="flex items-start gap-2 text-amber-800 text-sm mb-3">
-                  <AlertTriangle size={18} className="shrink-0 mt-0.5" aria-hidden="true" />
-                  <span>
-                    <strong>Não foi possível abrir seu e-mail automaticamente.</strong><br />
-                    Use uma das opções abaixo:
-                  </span>
-                </div>
-                <div className="flex flex-col sm:flex-row gap-2">
-                  <a
-                    ref={mailtoRef}
-                    href={buildMailtoUrl()}
-                    className="flex-1 inline-flex items-center justify-center gap-2 py-2.5 px-4 bg-ocean-600 text-white rounded-lg font-medium hover:bg-ocean-700 transition-colors text-sm"
-                  >
-                    <Mail size={16} aria-hidden="true" />
-                    Tentar abrir e-mail
-                  </a>
-                  <button
-                    type="button"
-                    onClick={handleCopiar}
-                    className="flex-1 inline-flex items-center justify-center gap-2 py-2.5 px-4 bg-amber-600 text-white rounded-lg font-medium hover:bg-amber-700 transition-colors text-sm"
-                  >
-                    <Copy size={16} aria-hidden="true" />
-                    Copiar mensagem
-                  </button>
-                </div>
-                <p className="text-xs text-amber-700 mt-2">
-                  Envie para: <strong>{EMAIL}</strong>
-                </p>
-              </div>
-            )}
 
             <form
               action={FORMSUBMIT_URL}
               method="POST"
-              onSubmit={handleSubmitForm}
               className="space-y-4"
             >
-              {/* Honeypot anti-spam para formsubmit */}
-              <input type="hidden" name="_captcha" value="false" />
+              {/* Campos ocultos FormSubmit */}
+              <input type="hidden" name="_subject" value="Pedido — Livro Água Viva" />
+              <input type="hidden" name="_template" value="table" />
+              <input type="hidden" name="_captcha" value="true" />
+              <input type="hidden" name="_next" value={OBRIGADO_URL} />
               <input
-                type="hidden"
-                name="_subject"
-                value="Pedido / Contato — Livro Água-Viva"
+                type="text"
+                name="_honey"
+                style={{ display: "none" }}
+                tabIndex={-1}
+                autoComplete="off"
               />
-              <input type="text" name="_honey" className="hidden" tabIndex={-1} autoComplete="off" />
-              <input type="hidden" name="_next" value="https://agua-viva-landing.vercel.app/?enviado=1" />
 
+              {/* Nome */}
               <div>
                 <label
                   htmlFor="nome"
@@ -327,16 +162,15 @@ export default function BuyModal() {
                 </label>
                 <input
                   id="nome"
-                  name="nome"
+                  name="name"
                   type="text"
                   required
-                  value={nome}
-                  onChange={(e) => setNome(e.target.value)}
                   className="w-full rounded-xl border border-sand-300 px-4 py-3 text-ocean-900 focus:border-ocean-500 focus:ring-2 focus:ring-ocean-200 transition-colors"
                   placeholder="Seu nome completo"
                 />
               </div>
 
+              {/* E-mail */}
               <div>
                 <label
                   htmlFor="email-campo"
@@ -349,13 +183,30 @@ export default function BuyModal() {
                   name="email"
                   type="email"
                   required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
                   className="w-full rounded-xl border border-sand-300 px-4 py-3 text-ocean-900 focus:border-ocean-500 focus:ring-2 focus:ring-ocean-200 transition-colors"
                   placeholder="seu@email.com"
                 />
               </div>
 
+              {/* Telefone / WhatsApp do comprador */}
+              <div>
+                <label
+                  htmlFor="telefone"
+                  className="block text-sm font-semibold text-ocean-800 mb-1"
+                >
+                  Telefone / WhatsApp <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="telefone"
+                  name="phone"
+                  type="tel"
+                  required
+                  className="w-full rounded-xl border border-sand-300 px-4 py-3 text-ocean-900 focus:border-ocean-500 focus:ring-2 focus:ring-ocean-200 transition-colors"
+                  placeholder="(00) 00000-0000"
+                />
+              </div>
+
+              {/* Cidade / UF */}
               <div>
                 <label
                   htmlFor="cidade"
@@ -366,75 +217,49 @@ export default function BuyModal() {
                 </label>
                 <input
                   id="cidade"
-                  name="cidade"
+                  name="city"
                   type="text"
-                  value={cidade}
-                  onChange={(e) => setCidade(e.target.value)}
                   className="w-full rounded-xl border border-sand-300 px-4 py-3 text-ocean-900 focus:border-ocean-500 focus:ring-2 focus:ring-ocean-200 transition-colors"
                   placeholder="Ex.: Ribeirão Preto - SP"
                 />
               </div>
 
+              {/* Mensagem */}
               <div>
                 <label
                   htmlFor="mensagem"
                   className="block text-sm font-semibold text-ocean-800 mb-1"
                 >
-                  Mensagem
+                  Mensagem <span className="text-red-500">*</span>
                 </label>
                 <textarea
                   id="mensagem"
-                  name="mensagem"
+                  name="message"
                   rows={4}
-                  value={mensagem}
-                  onChange={(e) => setMensagem(e.target.value)}
+                  required
+                  defaultValue={`Olá! Quero comprar o livro Água Viva.\nMeu nome é:\nMeu telefone/WhatsApp:\nGostaria de informações sobre valor/entrega/dedicatória.\nObrigado!`}
                   className="w-full rounded-xl border border-sand-300 px-4 py-3 text-ocean-900 focus:border-ocean-500 focus:ring-2 focus:ring-ocean-200 transition-colors resize-none"
                 />
               </div>
 
-              {/* 3 botões de envio */}
-              <div className="space-y-3 pt-2">
-                {/* Linha 1: E-mail + WhatsApp */}
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <button
-                    type="button"
-                    onClick={handleMailto}
-                    disabled={!camposValidos}
-                    className="flex-1 inline-flex items-center justify-center gap-2 py-3.5 px-5 bg-ocean-600 text-white rounded-xl font-semibold hover:bg-ocean-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <Mail size={18} aria-hidden="true" />
-                    Enviar por e-mail
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleWhatsApp}
-                    disabled={!camposValidos}
-                    className="flex-1 inline-flex items-center justify-center gap-2 py-3.5 px-5 bg-green-600 text-white rounded-xl font-semibold hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <MessageCircle size={18} aria-hidden="true" />
-                    Enviar por WhatsApp
-                  </button>
-                </div>
-
-                {/* Linha 2: Formulário */}
+              {/* Botão de envio */}
+              <div className="pt-2">
                 <button
                   type="submit"
-                  disabled={!camposValidos}
-                  className="w-full inline-flex items-center justify-center gap-2 py-3.5 px-6 bg-gold-500 text-ocean-950 rounded-xl font-semibold hover:bg-gold-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full inline-flex items-center justify-center gap-2 py-4 px-6 bg-gold-500 text-ocean-950 rounded-xl font-bold text-lg hover:bg-gold-400 transition-colors shadow-lg hover:shadow-gold-500/30"
                 >
-                  <Send size={18} aria-hidden="true" />
-                  Enviar formulário direto
+                  <Send size={20} aria-hidden="true" />
+                  Enviar pedido
                 </button>
               </div>
             </form>
 
-            {!camposValidos && (nome.length > 0 || email.length > 0) && (
-              <p className="text-xs text-red-500 mt-2 text-center">
-                Preencha nome e e-mail válido para enviar.
-              </p>
-            )}
+            <p className="text-xs text-ocean-500 mt-4 text-center leading-relaxed">
+              Seu pedido será enviado diretamente ao e-mail do autor.
+              Você receberá retorno pelo e-mail ou telefone informado.
+            </p>
 
-            <p className="text-xs text-ocean-400 mt-4 text-center">
+            <p className="text-xs text-ocean-400 mt-2 text-center">
               Ao enviar, você concorda em ser contatado pelo autor para
               finalizar o pedido.
             </p>
