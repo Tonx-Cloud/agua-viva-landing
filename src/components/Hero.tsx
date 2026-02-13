@@ -9,14 +9,20 @@ export default function Hero() {
       className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16"
       aria-label="Seção principal"
     >
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-ocean-950 via-ocean-900 to-ocean-800" />
+      {/* Background video */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="none"
+        className="absolute inset-0 w-full h-full object-cover"
+      >
+        <source src="/videos/hero-agua-viva.mp4" type="video/mp4" />
+      </video>
 
-      {/* Decoração */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-ocean-400 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gold-400 rounded-full blur-3xl" />
-      </div>
+      {/* Overlay escuro para legibilidade */}
+      <div className="absolute inset-0 bg-black/55" />
 
       <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 text-center">
         {/* Badge */}
