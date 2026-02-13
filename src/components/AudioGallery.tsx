@@ -1,8 +1,10 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import { audios, AudioItem } from "@/data/audios";
 
 const AudioCard: React.FC<{ audio: AudioItem }> = ({ audio }) => {
-  const [error, setError] = React.useState(false);
+  const [error, setError] = useState(false);
 
   return (
     <div className="bg-black/50 border border-white/10 rounded-lg p-6 hover:bg-black/70 transition-colors">
