@@ -1,13 +1,13 @@
 import { Award } from "lucide-react";
 
 const CREDENCIAIS = [
-  { texto: "Ex-presidente da ARL (Academia Ribeirão-pretana de Letras)", destaque: "ARL" },
+  { texto: "Ex-presidente da ARL (Academia Ribeirãopretana de Letras)", destaque: "ARL" },
   { texto: "Idealizador, fundador e ex-presidente da ARE (Academia Ribeirão-pretana de Educação)", destaque: "ARE" },
   { texto: "Ex-membro da ALARP; membro da CPERP", destaque: "ALARP / CPERP" },
   { texto: "Ex-membro da UBE e UBT", destaque: "UBE / UBT" },
   { texto: "Membro fundador da ALAJ", destaque: "ALAJ" },
   { texto: "Membro de academias e casas culturais (Anápolis-GO; Pindamonhangaba; Itaperuna etc.)", destaque: "" },
-  { texto: "Diretor do Grupo Amigos da Fotografia", destaque: "Amigos da Fotografia" },
+  { texto: "Ex-diretor do Grupo Amigos da Fotografia", destaque: "Amigos da Fotografia" },
 ];
 
 export default function AuthorSection() {

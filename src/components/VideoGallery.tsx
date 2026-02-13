@@ -69,7 +69,7 @@ export default function VideoGallery() {
             e pela voz do&nbsp;verso.
           </p>
           <p className="font-serif text-ocean-600 italic text-base">
-            Dê play — e deixe a poesia te&nbsp;encontrar.
+            Dê play — e deixe a poesia encontrar&nbsp;você.
           </p>
           <div className="w-16 h-1 bg-gold-500 mx-auto rounded-full mt-6" />
         </div>
