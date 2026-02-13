@@ -99,10 +99,10 @@ Browser (HTTPS) → Vercel /api/audio/audio-01.mpeg → VM HTTP 34.9.51.163/audi
 | # | Arquivo | Poema | Autor | Duração |
 |---|---------|-------|-------|---------|
 | 1 | audio-01.mpeg | Forma de Amar | Antonio Carlos Tórtoro | 01:35 |
-| 2 | audio-02.mpeg | Bala Perdida | Antonio Carlos Tórtoro | 01:17 |
-| 3 | audio-03.mpeg | Louvado Seja o Senhor | Antonio Carlos Tórtoro | 02:09 |
-| 4 | audio-04.mpeg | Cócoras | Antonio Carlos Tórtoro | 02:13 |
-| 5 | audio-05.mpeg | Natal | Antonio Carlos Tórtoro | 01:37 |
+| 2 | audio-02.mpeg | Encontrado | Antonio Carlos Tórtoro | 01:17 |
+| 3 | audio-03.mpeg | Louvor | Antonio Carlos Tórtoro | 02:09 |
+| 4 | audio-04.mpeg | Kokura | Antonio Carlos Tórtoro | 02:13 |
+| 5 | audio-05.mpeg | Mais Um | Antonio Carlos Tórtoro | 01:37 |
 | 6 | audio-06.mpeg | Mariana | Antonio Carlos Tórtoro | 01:07 |
 
 ---

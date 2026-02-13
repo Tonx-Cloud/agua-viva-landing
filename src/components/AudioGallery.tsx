@@ -21,7 +21,7 @@ const AudioCard: React.FC<{ audio: AudioItem }> = ({ audio }) => {
             Autor: <span className="text-white/70">{audio.author}</span>
           </p>
         )}
-        <p className="text-sm text-gray-400 mb-2">Voz: {audio.voice}</p>
+
         <span className="inline-block bg-white/10 text-white text-xs rounded px-2 py-1">
           {audio.duration}
         </span>
@@ -60,7 +60,7 @@ export default function AudioGallery() {
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-serif mb-6">
-            Água Viva — Edição Lua
+            Livro Água Viva — Edição Audiobook
           </h2>
           <p className="text-lg text-gray-300 mb-8">
             Há versos que precisam ser lidos.<br />E há versos que precisam ser ouvidos.
@@ -83,7 +83,7 @@ export default function AudioGallery() {
             📖 + 🎧 Livro físico + experiência sonora
           </p>
           <p className="text-gray-400">
-            Garanta seu exemplar agora e receba também acesso à Edição Lua.
+            Garanta seu exemplar agora e receba também acesso ao audiobook.
           </p>
           <div className="mt-8">
             <span className="inline-block bg-white/10 text-white text-sm rounded px-4 py-2 mr-2 font-semibold tracking-wide">

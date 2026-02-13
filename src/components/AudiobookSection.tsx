@@ -14,7 +14,7 @@ export default function AudiobookSection() {
     <section className="py-20 bg-black text-white">
       <div className="max-w-5xl mx-auto px-6 text-center">
         <h2 className="text-3xl md:text-4xl font-serif mb-6">
-          Água Viva — Edição Lua
+          Livro Água Viva — Edição Audiobook
         </h2>
         <p className="text-lg text-gray-300 mb-8">
           Há versos que precisam ser lidos.<br />E há versos que precisam ser ouvidos.
@@ -25,7 +25,7 @@ export default function AudiobookSection() {
           com cadência suave e presença emocional.
         </p>
         <h3 className="text-2xl font-semibold mb-6">
-          🎧 Degustação da Edição Lua
+          🎧 Degustação do Audiobook
         </h3>
         <p className="text-gray-400 mb-8">
           Feche os olhos por alguns segundos.<br />Deixe a palavra tocar antes de entender.
@@ -42,7 +42,7 @@ export default function AudiobookSection() {
             📖 + 🎧 Livro físico + experiência sonora
           </p>
           <p className="text-gray-400">
-            Garanta seu exemplar agora e receba também acesso à Edição Lua.
+            Garanta seu exemplar agora e receba também acesso ao audiobook.
           </p>
         </div>
         <div className="mt-8">
