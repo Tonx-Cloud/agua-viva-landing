@@ -2,8 +2,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Pedido enviado — Água Viva",
-  description: "Sua mensagem foi enviada com sucesso. Em breve o autor entrará em contato.",
+  title: "E-mail enviado com sucesso — Livro Água Viva",
+  description: "Recebemos sua mensagem. Em breve entraremos em contato pelo e-mail ou telefone informado.",
 };
 
 export default function ObrigadoPage() {
@@ -15,15 +15,14 @@ export default function ObrigadoPage() {
         </div>
 
         <h1 className="font-serif text-3xl sm:text-4xl font-bold text-sand-50 mb-4">
-          Pedido enviado!
+          E-mail enviado com sucesso
         </h1>
 
         <p className="text-sand-300 text-lg mb-2">
-          Recebemos sua mensagem com sucesso.
+          Recebemos sua mensagem.
         </p>
         <p className="text-sand-400 mb-8">
-          Em breve entraremos em contato pelo e-mail ou telefone informado
-          para combinar os próximos passos.
+          Em breve entraremos em contato pelo e-mail ou telefone informado.
         </p>
 
         <Link
