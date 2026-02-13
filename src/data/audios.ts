@@ -16,7 +16,7 @@ export const audios: AudioItem[] = [
     voice: "Voz principal",
     duration: "01:07",
     note: "Trecho recitado em estilo intimista, capturando a essência poética.",
-    src: "https://placeholder-url-for-AUD-20260212-WA0052.mp3" // Substitua pela URL real do Vercel Blob
+    src: "https://audios.SEUDOMINIO.com/AUD-20260212-WA0052.mp3" // Substitua SEUDOMINIO pelo seu domínio real
   },
   {
     id: "wa0053",
@@ -25,7 +25,7 @@ export const audios: AudioItem[] = [
     voice: "Voz principal",
     duration: "02:13",
     note: "Exploração rítmica da palavra, com pausas que ecoam o silêncio.",
-    src: "https://placeholder-url-for-AUD-20260212-WA0053.mp3" // Substitua pela URL real do Vercel Blob
+    src: "https://audios.SEUDOMINIO.com/AUD-20260212-WA0053.mp3" // Substitua SEUDOMINIO pelo seu domínio real
   },
   {
     id: "wa0054",
@@ -34,7 +34,7 @@ export const audios: AudioItem[] = [
     voice: "Voz principal",
     duration: "02:10",
     note: "Interpretação que destaca a transparência e brilho da poesia.",
-    src: "https://placeholder-url-for-AUD-20260212-WA0054.mp3" // Substitua pela URL real do Vercel Blob
+    src: "https://audios.SEUDOMINIO.com/AUD-20260212-WA0054.mp3" // Substitua SEUDOMINIO pelo seu domínio real
   },
   {
     id: "wa0055",
@@ -43,7 +43,7 @@ export const audios: AudioItem[] = [
     voice: "Voz principal",
     duration: "01:35",
     note: "Recitação suave, como luz filtrada pela água.",
-    src: "https://placeholder-url-for-AUD-20260212-WA0055.mp3" // Substitua pela URL real do Vercel Blob
+    src: "https://audios.SEUDOMINIO.com/AUD-20260212-WA0055.mp3" // Substitua SEUDOMINIO pelo seu domínio real
   },
   {
     id: "wa0056",
@@ -52,7 +52,7 @@ export const audios: AudioItem[] = [
     voice: "Voz principal",
     duration: "01:10",
     note: "Momento de reflexão sonora, onde a palavra se dissolve em emoção.",
-    src: "https://placeholder-url-for-AUD-20260212-WA0056.mp3" // Substitua pela URL real do Vercel Blob
+    src: "https://audios.SEUDOMINIO.com/AUD-20260212-WA0056.mp3" // Substitua SEUDOMINIO pelo seu domínio real
   },
   {
     id: "mariana",
@@ -61,6 +61,6 @@ export const audios: AudioItem[] = [
     voice: "Mariana",
     duration: "01:07",
     note: "Interpretação especial de Mariana, trazendo uma voz feminina à poesia.",
-    src: "https://placeholder-url-for-mariana-declamacao-1.mp3" // Substitua pela URL real do Vercel Blob
+    src: "https://audios.SEUDOMINIO.com/mariana-declamacao-1.mp3" // Substitua SEUDOMINIO pelo seu domínio real
   }
 ];
