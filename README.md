@@ -179,6 +179,42 @@ URL de produção: https://agua-viva-landing.vercel.app
 
 ---
 
+## Segurança
+
+O projeto inclui hardening baseado em OWASP Top 10:
+
+### Security Headers (`next.config.ts`)
+
+| Header | Valor |
+|--------|-------|
+| `Content-Security-Policy` | Restringe origens de scripts, estilos, frames, etc. |
+| `Strict-Transport-Security` | HSTS 1 ano + preload (apenas em produção) |
+| `X-Frame-Options` | `DENY` — impede clickjacking |
+| `X-Content-Type-Options` | `nosniff` |
+| `Referrer-Policy` | `strict-origin-when-cross-origin` |
+| `Permissions-Policy` | Bloqueia camera, microfone, geolocalização |
+| `X-Powered-By` | Removido (`poweredByHeader: false`) |
+
+### Rate Limiting (`middleware.ts`)
+
+- Token bucket: 30 requests/minuto por IP nas rotas `/api/*`
+- Proteção contra burst e abuso de endpoints
+- In-memory (reseta em cold start na Vercel)
+
+### Variáveis de Ambiente
+
+| Variável | Descrição | Obrigatória |
+|----------|-----------|-------------|
+| `AUDIO_VM_URL` | URL base da VM de áudios (ex: `http://IP/audios`) | Não (tem fallback) |
+
+Configurar na Vercel:
+
+```bash
+npx vercel env add AUDIO_VM_URL production
+```
+
+---
+
 ## Links
 
 - [Site em produção](https://agua-viva-landing.vercel.app)
