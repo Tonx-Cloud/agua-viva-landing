@@ -3,8 +3,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { X, Send, ShoppingCart, Info, Gift } from "lucide-react";
 
-const EMAIL = "ancartor@yahoo.com";
-const FORMSUBMIT_URL = `https://formsubmit.co/${EMAIL}`;
+const EMAILS = "ancartor@yahoo.com,hiltonsf@gmail.com";
+const FORMSUBMIT_URL = `https://formsubmit.co/${EMAILS}`;
 const OBRIGADO_URL = "https://agua-viva-landing.vercel.app/obrigado";
 
 const OPCOES = [

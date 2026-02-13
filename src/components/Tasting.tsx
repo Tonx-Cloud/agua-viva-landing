@@ -37,7 +37,7 @@ export default function Tasting() {
             Degustação — trechos selecionados
           </h2>
           <p className="text-sand-300 text-lg max-w-xl mx-auto mb-6">
-            Um gosto do que te espera em <em>Água-Viva</em>. Trechos breves,
+            Um gosto do que te espera no <em>Livro Água Viva</em>. Trechos breves,
             para sentir a textura da&nbsp;escrita.
           </p>
           <div className="w-16 h-1 bg-gold-500 mx-auto rounded-full" />

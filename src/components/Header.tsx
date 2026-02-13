@@ -26,7 +26,7 @@ export default function Header() {
             className="font-serif text-xl font-bold text-sand-100 hover:text-gold-400 transition-colors"
             aria-label="Ir para o início"
           >
-            Água-Viva
+            Livro Água Viva
           </a>
 
           {/* Nav desktop */}

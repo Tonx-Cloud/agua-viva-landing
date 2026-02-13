@@ -71,6 +71,10 @@ export default function AboutBook() {
         <p className="text-center font-serif text-xl sm:text-2xl text-ocean-900 font-semibold">
           Leitura rápida. Impacto&nbsp;duradouro.
         </p>
+        <p className="text-center text-ocean-600 text-base sm:text-lg mt-3 max-w-xl mx-auto leading-relaxed">
+          Presente ideal para quem você ama — para aquele amigo culto que
+          aprecia poesia e a melhor música&nbsp;brasileira.
+        </p>
       </div>
     </section>
   );

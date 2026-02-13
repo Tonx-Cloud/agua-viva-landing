@@ -31,8 +31,8 @@ export default function BlogSection() {
           </p>
           <p className="text-ocean-600 leading-relaxed">
             Se você aprecia literatura que dialoga com o cotidiano, vale
-            acompanhar o autor além das páginas de{" "}
-            <em className="text-ocean-800">Água-Viva</em>.
+            acompanhar o autor além das páginas do{" "}
+            <em className="text-ocean-800">Livro Água Viva</em>.
           </p>
         </div>
 
