@@ -48,34 +48,34 @@ export default function BuyModal() {
       {/* Seção CTA Comprar */}
       <div id="comprar" className="py-20 sm:py-28 bg-linear-to-b from-ocean-900 to-ocean-950">
         <div className="mx-auto max-w-4xl px-4 sm:px-6">
-          <div className="text-center mb-12">
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-sand-50 mb-4">
+          <div className="text-center mb-8">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-sand-50 mb-3">
               Leve &ldquo;Água Viva&rdquo; para a sua estante
             </h2>
-            <p className="text-sand-300 text-lg max-w-lg mx-auto">
+            <p className="text-sand-300 text-base sm:text-lg max-w-lg mx-auto">
               Quer comprar, tirar dúvidas, pedir dedicatória ou combinar
               entrega? Fale diretamente com o autor. É simples e&nbsp;rápido.
             </p>
           </div>
 
           {/* Cards de opções */}
-          <div className="grid sm:grid-cols-3 gap-4 sm:gap-6 mb-12 max-w-3xl mx-auto">
+          <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-8 max-w-2xl mx-auto">
             {OPCOES.map((opcao) => {
               const Icone = opcao.icone;
               return (
                 <div
                   key={opcao.titulo}
-                  className="bg-ocean-800/50 backdrop-blur rounded-2xl p-6 text-center border border-ocean-700/40 hover:border-gold-500/40 transition-all"
+                  className="bg-ocean-800/50 backdrop-blur rounded-xl p-3 sm:p-4 text-center border border-ocean-700/40 hover:border-gold-500/40 transition-all"
                 >
                   <Icone
-                    size={28}
-                    className="mx-auto mb-3 text-gold-400"
+                    size={22}
+                    className="mx-auto mb-2 text-gold-400"
                     aria-hidden="true"
                   />
-                  <h3 className="font-serif font-bold text-sand-50 text-lg mb-1">
+                  <h3 className="font-serif font-bold text-sand-50 text-sm sm:text-base mb-0.5">
                     {opcao.titulo}
                   </h3>
-                  <p className="text-sand-400 text-sm">{opcao.desc}</p>
+                  <p className="text-sand-400 text-xs">{opcao.desc}</p>
                 </div>
               );
             })}
