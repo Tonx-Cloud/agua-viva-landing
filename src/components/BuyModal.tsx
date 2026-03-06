@@ -46,36 +46,36 @@ export default function BuyModal() {
   return (
     <>
       {/* Seção CTA Comprar */}
-      <div id="comprar" className="py-20 sm:py-28 bg-linear-to-b from-ocean-900 to-ocean-950">
+      <div id="comprar" className="py-12 sm:py-20 md:py-28 bg-linear-to-b from-ocean-900 to-ocean-950">
         <div className="mx-auto max-w-4xl px-4 sm:px-6">
-          <div className="text-center mb-8">
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-sand-50 mb-3">
+          <div className="text-center mb-5 sm:mb-8">
+            <h2 className="font-serif text-2xl sm:text-4xl md:text-5xl font-bold text-sand-50 mb-2 sm:mb-3">
               Leve &ldquo;Água Viva&rdquo; para a sua estante
             </h2>
-            <p className="text-sand-300 text-base sm:text-lg max-w-lg mx-auto">
+            <p className="text-sand-300 text-sm sm:text-lg max-w-lg mx-auto">
               Quer comprar, tirar dúvidas, pedir dedicatória ou combinar
-              entrega? Fale diretamente com o autor. É simples e&nbsp;rápido.
+              entrega? Fale diretamente com o autor.
             </p>
           </div>
 
           {/* Cards de opções */}
-          <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-8 max-w-2xl mx-auto">
+          <div className="flex justify-center gap-2 sm:gap-4 mb-5 sm:mb-8 max-w-2xl mx-auto">
             {OPCOES.map((opcao) => {
               const Icone = opcao.icone;
               return (
                 <div
                   key={opcao.titulo}
-                  className="bg-ocean-800/50 backdrop-blur rounded-xl p-3 sm:p-4 text-center border border-ocean-700/40 hover:border-gold-500/40 transition-all"
+                  className="bg-ocean-800/50 backdrop-blur rounded-xl p-2 sm:p-4 text-center border border-ocean-700/40 hover:border-gold-500/40 transition-all flex-1 min-w-0"
                 >
                   <Icone
-                    size={22}
-                    className="mx-auto mb-2 text-gold-400"
+                    size={20}
+                    className="mx-auto mb-1 sm:mb-2 text-gold-400"
                     aria-hidden="true"
                   />
-                  <h3 className="font-serif font-bold text-sand-50 text-sm sm:text-base mb-0.5">
+                  <h3 className="font-serif font-bold text-sand-50 text-xs sm:text-base leading-tight mb-0.5">
                     {opcao.titulo}
                   </h3>
-                  <p className="text-sand-400 text-xs">{opcao.desc}</p>
+                  <p className="text-sand-400 text-[10px] sm:text-xs hidden sm:block">{opcao.desc}</p>
                 </div>
               );
             })}
@@ -84,12 +84,12 @@ export default function BuyModal() {
           <div className="text-center">
             <button
               onClick={openModal}
-              className="inline-flex items-center gap-3 px-10 py-5 text-xl font-bold rounded-2xl bg-gold-500 text-ocean-950 hover:bg-gold-400 transition-all shadow-2xl hover:shadow-gold-500/30 hover:-translate-y-1"
+              className="inline-flex items-center gap-2 sm:gap-3 px-6 sm:px-10 py-3 sm:py-5 text-base sm:text-xl font-bold rounded-2xl bg-gold-500 text-ocean-950 hover:bg-gold-400 transition-all shadow-2xl hover:shadow-gold-500/30 hover:-translate-y-1"
             >
-              <ShoppingCart size={24} aria-hidden="true" />
+              <ShoppingCart size={20} aria-hidden="true" />
               Comprar agora
             </button>
-            <p className="text-sand-500 text-sm mt-4">
+            <p className="text-sand-500 text-xs sm:text-sm mt-3 sm:mt-4">
               Você envia a mensagem e o autor retorna para combinar os
               próximos&nbsp;passos.
             </p>
