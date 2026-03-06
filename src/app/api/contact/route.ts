@@ -5,7 +5,7 @@ import nodemailer from "nodemailer";
 const SMTP_USER = process.env.SMTP_USER!;           // hiltonsf@gmail.com
 const SMTP_PASS = process.env.SMTP_PASS!;           // App Password
 const EMAIL_TO  = process.env.EMAIL_TO  || SMTP_USER;
-const EMAIL_CC  = process.env.EMAIL_CC  || "";
+const EMAIL_CC  = process.env.EMAIL_CC  || "ancartor@gmail.com";
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -13,10 +13,19 @@ const transporter = nodemailer.createTransport({
 });
 
 /* ─── Campos obrigatórios ──────────────────────────────── */
-const REQUIRED = ["name", "email", "phone", "message"] as const;
+const REQUIRED = ["name", "email", "message"] as const;
 
 function sanitize(value: unknown): string {
-  return String(value ?? "").trim().slice(0, 2000);
+  if (typeof value !== "string") return "";
+  return value.trim().slice(0, 2000);
+}
+
+function escapeHtml(str: string): string {
+  return str
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
 }
 
 export async function POST(req: NextRequest) {
@@ -38,11 +47,10 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const name    = sanitize(body.name);
-    const email   = sanitize(body.email);
-    const phone   = sanitize(body.phone);
-    const city    = sanitize(body.city) || "(não informado)";
-    const message = sanitize(body.message);
+    const name    = escapeHtml(sanitize(body.name));
+    const email   = escapeHtml(sanitize(body.email));
+    const city    = escapeHtml(sanitize(body.city)) || "(não informado)";
+    const message = escapeHtml(sanitize(body.message));
 
     const htmlBody = `
       <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; padding: 24px;">
@@ -59,10 +67,6 @@ export async function POST(req: NextRequest) {
             <td style="padding: 10px; border-bottom: 1px solid #eee;">
               <a href="mailto:${email}">${email}</a>
             </td>
-          </tr>
-          <tr>
-            <td style="padding: 10px; font-weight: bold; color: #1a3a5c; border-bottom: 1px solid #eee;">Telefone</td>
-            <td style="padding: 10px; border-bottom: 1px solid #eee;">${phone}</td>
           </tr>
           <tr>
             <td style="padding: 10px; font-weight: bold; color: #1a3a5c; border-bottom: 1px solid #eee;">Cidade/UF</td>

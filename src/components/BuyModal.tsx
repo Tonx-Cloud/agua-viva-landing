@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 import { X, Send, ShoppingCart, Info, Gift, Loader2 } from "lucide-react";
 
 const OBRIGADO_URL = "/obrigado";
@@ -24,35 +24,29 @@ const OPCOES = [
 ];
 
 export default function BuyModal() {
-  const [open, setOpen] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
-  // Fechar com ESC
-  const handleEsc = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
-    },
-    []
-  );
+  const openModal = () => dialogRef.current?.showModal();
+  const closeModal = () => dialogRef.current?.close();
 
+  // Resetar estado ao fechar
   useEffect(() => {
-    if (open) {
-      document.addEventListener("keydown", handleEsc);
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.removeEventListener("keydown", handleEsc);
-      document.body.style.overflow = "";
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    const onClose = () => {
+      setError("");
+      setSending(false);
     };
-  }, [open, handleEsc]);
+    dialog.addEventListener("close", onClose);
+    return () => dialog.removeEventListener("close", onClose);
+  }, []);
 
   return (
     <>
       {/* Seção CTA Comprar */}
-      <div id="comprar" className="py-20 sm:py-28 bg-gradient-to-b from-ocean-900 to-ocean-950">
+      <div id="comprar" className="py-20 sm:py-28 bg-linear-to-b from-ocean-900 to-ocean-950">
         <div className="mx-auto max-w-4xl px-4 sm:px-6">
           <div className="text-center mb-12">
             <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-sand-50 mb-4">
@@ -89,7 +83,7 @@ export default function BuyModal() {
 
           <div className="text-center">
             <button
-              onClick={() => setOpen(true)}
+              onClick={openModal}
               className="inline-flex items-center gap-3 px-10 py-5 text-xl font-bold rounded-2xl bg-gold-500 text-ocean-950 hover:bg-gold-400 transition-all shadow-2xl hover:shadow-gold-500/30 hover:-translate-y-1"
             >
               <ShoppingCart size={24} aria-hidden="true" />
@@ -104,23 +98,14 @@ export default function BuyModal() {
       </div>
 
       {/* Modal */}
-      {open && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Formulário de compra"
-        >
-          {/* Overlay */}
-          <div
-            className="absolute inset-0 bg-ocean-950/80 backdrop-blur-sm"
-            onClick={() => setOpen(false)}
-          />
-
-          {/* Conteúdo */}
-          <div className="relative bg-white rounded-3xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8">
+      <dialog
+        ref={dialogRef}
+        className="fixed inset-0 z-100 m-auto max-w-lg w-full max-h-[90vh] overflow-y-auto rounded-3xl shadow-2xl p-0 bg-transparent backdrop:bg-ocean-950/80 backdrop:backdrop-blur-sm"
+        aria-label="Formulário de compra"
+      >
+        <div className="bg-white rounded-3xl p-6 sm:p-8 relative">
             <button
-              onClick={() => setOpen(false)}
+              onClick={closeModal}
               className="absolute top-4 right-4 text-ocean-400 hover:text-ocean-700 transition-colors p-1"
               aria-label="Fechar formulário"
             >
@@ -151,7 +136,7 @@ export default function BuyModal() {
                     const data = await res.json().catch(() => ({}));
                     throw new Error(data.error || "Erro ao enviar");
                   }
-                  window.location.href = OBRIGADO_URL;
+                  globalThis.location.href = OBRIGADO_URL;
                 } catch (err: unknown) {
                   setSending(false);
                   setError(err instanceof Error ? err.message : "Erro ao enviar. Tente novamente.");
@@ -204,24 +189,6 @@ export default function BuyModal() {
                 />
               </div>
 
-              {/* Telefone / WhatsApp do comprador */}
-              <div>
-                <label
-                  htmlFor="telefone"
-                  className="block text-sm font-semibold text-ocean-800 mb-1"
-                >
-                  Telefone / WhatsApp <span className="text-red-500">*</span>
-                </label>
-                <input
-                  id="telefone"
-                  name="phone"
-                  type="tel"
-                  required
-                  className="w-full rounded-xl border border-sand-300 px-4 py-3 text-ocean-900 focus:border-ocean-500 focus:ring-2 focus:ring-ocean-200 transition-colors"
-                  placeholder="(00) 00000-0000"
-                />
-              </div>
-
               {/* Cidade / UF */}
               <div>
                 <label
@@ -253,7 +220,7 @@ export default function BuyModal() {
                   name="message"
                   rows={4}
                   required
-                  defaultValue={`Olá! Quero comprar o livro Água Viva.\nMeu nome é:\nMeu telefone/WhatsApp:\nGostaria de informações sobre valor/entrega/dedicatória.\nObrigado!`}
+                  defaultValue={`Olá! Quero comprar o livro Água Viva.\nGostaria de informações sobre valor, entrega e dedicatória.\nObrigado!`}
                   className="w-full rounded-xl border border-sand-300 px-4 py-3 text-ocean-900 focus:border-ocean-500 focus:ring-2 focus:ring-ocean-200 transition-colors resize-none"
                 />
               </div>
@@ -292,9 +259,8 @@ export default function BuyModal() {
               Ao enviar, você concorda em ser contatado pelo autor para
               finalizar o pedido.
             </p>
-          </div>
         </div>
-      )}
+      </dialog>
     </>
   );
 }
