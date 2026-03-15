@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
 
 /* ─── Configuração ─────────────────────────────────────────── */
 
@@ -28,7 +29,25 @@ export async function GET(
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  // 2. Redireciona para URL pública do Supabase Storage (CDN)
+  // 2. Verificar autenticação + autorização
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user?.email) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { data: authUser } = await supabase
+    .from("authorized_users")
+    .select("role")
+    .eq("email", user.email)
+    .maybeSingle();
+
+  if (!authUser) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  // 3. Redireciona para URL pública do Supabase Storage (CDN)
   const publicUrl = `${SUPABASE_STORAGE_URL}/${filename}`;
 
   return NextResponse.redirect(publicUrl, {

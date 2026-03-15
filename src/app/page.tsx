@@ -11,6 +11,7 @@ import BlogSection from "@/components/BlogSection";
 import BuyModal from "@/components/BuyModal";
 import FloatingButtons from "@/components/FloatingButtons";
 import Footer from "@/components/Footer";
+import AuthGate from "@/components/AuthGate";
 
 export default function Home() {
   return (
@@ -20,15 +21,17 @@ export default function Home() {
         <Hero />
         <AboutBook />
         <QuoteBanner index={0} variant="dark" />
-        <Tasting />
-        <QuoteBanner index={1} variant="light" />
-        <AudioGallery />
-        <VideoGallery />
-        <QuoteBanner index={2} variant="dark" />
-        <AuthorSection />
-        <AuthorWorks />
-        <BlogSection />
-        <QuoteBanner index={3} variant="light" />
+        <AuthGate>
+          <Tasting />
+          <QuoteBanner index={1} variant="light" />
+          <AudioGallery />
+          <VideoGallery />
+          <QuoteBanner index={2} variant="dark" />
+          <AuthorSection />
+          <AuthorWorks />
+          <BlogSection />
+          <QuoteBanner index={3} variant="light" />
+        </AuthGate>
         <BuyModal />
       </main>
       <FloatingButtons />
