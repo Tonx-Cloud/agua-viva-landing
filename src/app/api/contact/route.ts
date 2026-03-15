@@ -93,8 +93,12 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ ok: true });
-  } catch (err) {
-    console.error("[contact] Erro ao enviar e-mail:", err);
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("[contact] Erro ao enviar e-mail:", msg);
+    console.error("[contact] SMTP_USER definida:", !!process.env.SMTP_USER);
+    console.error("[contact] SMTP_PASS definida:", !!process.env.SMTP_PASS);
+    console.error("[contact] EMAIL_TO:", EMAIL_TO);
     return NextResponse.json(
       { error: "Falha ao enviar. Tente novamente." },
       { status: 500 }
