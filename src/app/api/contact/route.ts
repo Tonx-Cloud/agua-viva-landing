@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
 /* ─── Configuração SMTP (Gmail) ─────────────────────────── */
-const SMTP_USER = process.env.SMTP_USER!;           // hiltonsf@gmail.com
+const SMTP_USER = process.env.SMTP_USER!;           // tonbarbeiros@gmail.com
 const SMTP_PASS = process.env.SMTP_PASS!;           // App Password
-const EMAIL_TO  = process.env.EMAIL_TO  || SMTP_USER;
-const EMAIL_CC  = process.env.EMAIL_CC  || "ancartor@gmail.com";
+const EMAIL_TO  = process.env.EMAIL_TO  || "ancartor@yahoo.com,ancartor@gmail.com";
+const EMAIL_CC  = process.env.EMAIL_CC  || SMTP_USER;
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
