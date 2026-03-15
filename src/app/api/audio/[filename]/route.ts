@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { readFile } from "fs/promises";
+import path from "path";
 
 /* ─── Configuração ─────────────────────────────────────────── */
 
@@ -6,7 +8,7 @@ const VM_BASE_RAW = process.env.AUDIO_VM_URL?.trim();
 
 if (!VM_BASE_RAW) {
   console.warn(
-    "[audio-proxy] AUDIO_VM_URL não definida — requisições de áudio falharão."
+    "[audio-proxy] AUDIO_VM_URL não definida — usando fallback de arquivos locais."
   );
 }
 
@@ -92,6 +94,39 @@ function limitedStream(
   });
 }
 
+/* ─── Fallback local ───────────────────────────────────────── */
+
+/** Diretórios candidatos para servir áudio local (em ordem de prioridade) */
+const LOCAL_AUDIO_DIRS = [
+  path.join(process.cwd(), "data", "audio_inputs"),
+  path.join(process.cwd(), "..", "assets", "audios"),
+];
+
+async function serveLocalFile(filename: string): Promise<NextResponse | null> {
+  for (const dir of LOCAL_AUDIO_DIRS) {
+    const filePath = path.join(dir, filename);
+    // Verifica path-traversal: o caminho resolvido deve estar dentro do diretório
+    if (!filePath.startsWith(dir)) return null;
+    try {
+      const data = await readFile(filePath);
+      return new NextResponse(data, {
+        status: 200,
+        headers: {
+          "Content-Type": "audio/mpeg",
+          "Content-Length": String(data.byteLength),
+          "X-Content-Type-Options": "nosniff",
+          "Accept-Ranges": "bytes",
+          "Cache-Control": "public, max-age=86400, immutable",
+          "Content-Disposition": "inline",
+        },
+      });
+    } catch {
+      // Arquivo não encontrado neste diretório, tenta o próximo
+    }
+  }
+  return null;
+}
+
 /* ─── Handler ──────────────────────────────────────────────── */
 
 export async function GET(
@@ -108,6 +143,10 @@ export async function GET(
   // 2. Construção segura da URL (anti-SSRF)
   const vmUrl = buildSafeUrl(filename);
   if (!vmUrl) {
+    // Fallback: tenta servir arquivo local quando a VM não está configurada
+    const localResponse = await serveLocalFile(filename);
+    if (localResponse) return localResponse;
+
     return NextResponse.json(
       { error: "Audio service unavailable" },
       { status: 503 }
@@ -199,6 +238,10 @@ export async function GET(
     });
   } catch (err: unknown) {
     clearTimeout(timeoutId);
+
+    // Fallback local quando upstream falha
+    const localResponse = await serveLocalFile(filename);
+    if (localResponse) return localResponse;
 
     if (err instanceof Error && err.name === "AbortError") {
       return NextResponse.json(
