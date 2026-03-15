@@ -10,11 +10,12 @@ const csp = [
   "img-src 'self' data: https:",
   "font-src 'self' data: https:",
   "style-src 'self' 'unsafe-inline'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+  // unsafe-eval apenas em dev (React Fast Refresh); removido em prod
+  `script-src 'self' 'unsafe-inline'${isProd ? "" : " 'unsafe-eval'"}`,
   "media-src 'self' blob: https:",
   "frame-src https://www.youtube.com",
   "connect-src 'self' https:",
-  "upgrade-insecure-requests",
+  ...(isProd ? ["upgrade-insecure-requests"] : []),
 ].join("; ");
 
 const securityHeaders = [

@@ -10,6 +10,9 @@ const buckets = new Map<string, Bucket>();
 const RATE = 30; // tokens por janela
 const WINDOW = 60_000; // 1 minuto
 const BURST = 30; // capacidade máxima
+const GC_INTERVAL = 5 * 60_000; // limpeza a cada 5 min
+const GC_MAX_AGE = 10 * 60_000; // remove buckets inativos há 10 min
+let lastGc = Date.now();
 
 function getIp(req: NextRequest): string {
   const xff = req.headers.get("x-forwarded-for");
@@ -19,6 +22,14 @@ function getIp(req: NextRequest): string {
 export function middleware(req: NextRequest) {
   const ip = getIp(req);
   const now = Date.now();
+
+  // Garbage collection periódico: evita memory leak de IPs antigos
+  if (now - lastGc > GC_INTERVAL) {
+    lastGc = now;
+    for (const [key, val] of buckets) {
+      if (now - val.last > GC_MAX_AGE) buckets.delete(key);
+    }
+  }
 
   const b = buckets.get(ip) ?? { tokens: BURST, last: now };
   const elapsed = now - b.last;
