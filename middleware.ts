@@ -1,15 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { updateSession } from "@/lib/supabase/middleware";
 
 export const config = {
-  matcher: [
-    /*
-     * Match all routes EXCEPT:
-     * - _next/static, _next/image, favicon.ico, sitemap.xml, robots.txt
-     * - arquivos estáticos com extensão (svg, png, jpg, etc.)
-     */
-    "/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
-  ],
+  matcher: ["/api/:path*"],
 };
 
 type Bucket = { tokens: number; last: number };
@@ -27,14 +19,11 @@ function getIp(req: NextRequest): string {
   return (xff?.split(",")[0] ?? "unknown").trim();
 }
 
-/** Rate limiting apenas para rotas /api/* */
-function rateLimit(req: NextRequest): NextResponse | null {
-  if (!req.nextUrl.pathname.startsWith("/api/")) return null;
-
+export function middleware(req: NextRequest) {
   const ip = getIp(req);
   const now = Date.now();
 
-  // Garbage collection periódico
+  // Garbage collection periódico: evita memory leak de IPs antigos
   if (now - lastGc > GC_INTERVAL) {
     lastGc = now;
     for (const [key, val] of buckets) {
@@ -58,14 +47,6 @@ function rateLimit(req: NextRequest): NextResponse | null {
 
   b.tokens -= 1;
   buckets.set(ip, b);
-  return null;
-}
 
-export async function middleware(req: NextRequest) {
-  // 1. Rate limiting para APIs
-  const rateLimited = rateLimit(req);
-  if (rateLimited) return rateLimited;
-
-  // 2. Refresh de sessão Supabase (mantém cookies válidos)
-  return await updateSession(req);
+  return NextResponse.next();
 }

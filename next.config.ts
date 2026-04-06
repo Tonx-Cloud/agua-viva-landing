@@ -13,8 +13,8 @@ const csp = [
   // unsafe-eval apenas em dev (React Fast Refresh); removido em prod
   `script-src 'self' 'unsafe-inline'${isProd ? "" : " 'unsafe-eval'"}`,
   "media-src 'self' blob: https:",
-  "frame-src https://www.youtube.com https://accounts.google.com https://*.supabase.co",
-  "connect-src 'self' https://*.supabase.co https://accounts.google.com https:",
+  "frame-src https://www.youtube.com",
+  "connect-src 'self' https:",
   ...(isProd ? ["upgrade-insecure-requests"] : []),
 ].join("; ");
 

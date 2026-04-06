@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Menu, X, LogIn, LogOut } from "lucide-react";
-import { useAuth } from "@/components/AuthProvider";
+import { Menu, X } from "lucide-react";
 
 const NAV_ITEMS = [
   { label: "Início", href: "#inicio" },
@@ -16,7 +15,6 @@ const NAV_ITEMS = [
 
 export default function Header() {
   const [open, setOpen] = useState(false);
-  const { user, loading, signInWithGoogle, signOut } = useAuth();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-ocean-950/95 backdrop-blur-md border-b border-ocean-800/50">
@@ -43,37 +41,6 @@ export default function Header() {
               </a>
             ))}
           </nav>
-
-          {/* Auth button desktop */}
-          <div className="hidden md:flex items-center gap-3">
-            {!loading && (
-              user ? (
-                <button
-                  onClick={signOut}
-                  className="flex items-center gap-2 text-sm text-sand-300 hover:text-gold-400 transition-colors"
-                >
-                  {user.user_metadata?.avatar_url && (
-                    <img
-                      src={user.user_metadata.avatar_url}
-                      alt=""
-                      className="w-6 h-6 rounded-full"
-                      referrerPolicy="no-referrer"
-                    />
-                  )}
-                  <span className="max-w-[120px] truncate">{user.user_metadata?.full_name || user.email}</span>
-                  <LogOut size={16} />
-                </button>
-              ) : (
-                <button
-                  onClick={signInWithGoogle}
-                  className="flex items-center gap-2 text-sm text-sand-200 hover:text-gold-400 transition-colors font-medium"
-                >
-                  <LogIn size={16} />
-                  Entrar
-                </button>
-              )
-            )}
-          </div>
 
           {/* Botão mobile */}
           <button
@@ -103,28 +70,6 @@ export default function Header() {
               {item.label}
             </a>
           ))}
-          {/* Auth button mobile */}
-          {!loading && (
-            <div className="px-6 py-3 border-t border-ocean-800/50 mt-2">
-              {user ? (
-                <button
-                  onClick={() => { signOut(); setOpen(false); }}
-                  className="flex items-center gap-2 text-sand-300 hover:text-gold-400 transition-colors w-full"
-                >
-                  <LogOut size={16} />
-                  Sair ({user.user_metadata?.full_name || user.email})
-                </button>
-              ) : (
-                <button
-                  onClick={() => { signInWithGoogle(); setOpen(false); }}
-                  className="flex items-center gap-2 text-sand-200 hover:text-gold-400 transition-colors w-full font-medium"
-                >
-                  <LogIn size={16} />
-                  Entrar com Google
-                </button>
-              )}
-            </div>
-          )}
         </nav>
       )}
     </header>
