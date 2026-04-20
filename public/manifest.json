@@ -1,0 +1,21 @@
+{
+  "name": "Livro Água Viva",
+  "short_name": "Água Viva",
+  "description": "Livro Água Viva — Poesia de Antonio Carlos Tórtoro",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#faf6f0",
+  "theme_color": "#0a1628",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
