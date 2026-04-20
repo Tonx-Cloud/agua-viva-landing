@@ -18,6 +18,7 @@ export default function Hero() {
         preload="none"
         className="absolute inset-0 w-full h-full object-cover"
       >
+        <source src="/videos/hero-agua-viva.webm" type="video/webm" />
         <source src="/videos/hero-agua-viva.mp4" type="video/mp4" />
       </video>
 

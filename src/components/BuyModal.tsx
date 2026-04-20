@@ -1,25 +1,59 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { X, Send, ShoppingCart, Info, Gift, Loader2 } from "lucide-react";
+import {
+  X,
+  Send,
+  FileText,
+  Smartphone,
+  BookOpen,
+  Check,
+  Loader2,
+  Star,
+} from "lucide-react";
 
 const OBRIGADO_URL = "/obrigado";
 
-const OPCOES = [
+const PLANOS = [
   {
-    icone: ShoppingCart,
-    titulo: "Comprar agora",
-    desc: "Envie sua mensagem e finalize o pedido",
+    icone: FileText,
+    titulo: "PDF do Livro",
+    preco: "R$ 29",
+    destaque: false,
+    features: [
+      "Versão digital em PDF",
+      "Leitura em celular, tablet ou PC",
+      "Acesso imediato após confirmação",
+    ],
   },
   {
-    icone: Info,
-    titulo: "Informações",
-    desc: "Valores, entrega e detalhes do livro",
+    icone: Smartphone,
+    titulo: "Água Viva Play",
+    preco: "R$ 98",
+    destaque: true,
+    badge: "Mais popular",
+    features: [
+      "Aplicativo PWA interativo",
+      "Poemas declamados em áudio",
+      "Leitura assistida",
+      "Vídeos e poemas musicados",
+      "Navegação prática entre poemas",
+    ],
   },
   {
-    icone: Gift,
-    titulo: "Dedicatória",
-    desc: "Peça um exemplar especial para presentear",
+    icone: BookOpen,
+    titulo: "Edição Premium",
+    subtitulo: "de Luxo",
+    preco: "R$ 297",
+    destaque: false,
+    features: [
+      "Livro físico encadernado, capa dura",
+      "Acabamento artesanal de luxo",
+      "Dedicatória exclusiva do autor",
+      "Acesso ao Água Viva Play incluso",
+      "Produção sob demanda (2–3 semanas)",
+      "Frete por conta do comprador",
+    ],
   },
 ];
 
@@ -47,51 +81,87 @@ export default function BuyModal() {
     <>
       {/* Seção CTA Comprar */}
       <div id="comprar" className="py-12 sm:py-20 md:py-28 bg-linear-to-b from-ocean-900 to-ocean-950">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6">
-          <div className="text-center mb-5 sm:mb-8">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
+          <div className="text-center mb-8 sm:mb-12">
             <h2 className="font-serif text-2xl sm:text-4xl md:text-5xl font-bold text-sand-50 mb-2 sm:mb-3">
-              Leve &ldquo;Água Viva&rdquo; para a sua estante
+              Leve &ldquo;Água Viva&rdquo; com você
             </h2>
-            <p className="text-sand-300 text-sm sm:text-lg max-w-lg mx-auto">
-              Quer comprar, tirar dúvidas, pedir dedicatória ou combinar
-              entrega? Fale diretamente com o autor.
+            <p className="text-sand-300 text-sm sm:text-lg max-w-xl mx-auto">
+              Escolha a experiência que mais combina com você e fale
+              diretamente com o autor.
             </p>
           </div>
 
-          {/* Cards de opções */}
-          <div className="flex justify-center gap-2 sm:gap-4 mb-5 sm:mb-8 max-w-2xl mx-auto">
-            {OPCOES.map((opcao) => {
-              const Icone = opcao.icone;
+          {/* Cards de preço */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5 mb-8 sm:mb-10 max-w-4xl mx-auto items-stretch">
+            {PLANOS.map((plano) => {
+              const Icone = plano.icone;
               return (
                 <div
-                  key={opcao.titulo}
-                  className="bg-ocean-800/50 backdrop-blur rounded-xl p-2 sm:p-4 text-center border border-ocean-700/40 hover:border-gold-500/40 transition-all flex-1 min-w-0"
+                  key={plano.titulo}
+                  className={`relative rounded-2xl p-5 sm:p-6 text-center border transition-all flex flex-col ${
+                    plano.destaque
+                      ? "bg-ocean-800 border-gold-500/60 shadow-lg shadow-gold-500/10 scale-[1.03] sm:scale-105"
+                      : "bg-ocean-800/50 border-ocean-700/40 hover:border-gold-500/30"
+                  }`}
                 >
+                  {plano.destaque && (
+                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 inline-flex items-center gap-1 bg-gold-500 text-ocean-950 text-xs font-bold px-3 py-1 rounded-full">
+                      <Star size={12} aria-hidden="true" />
+                      {plano.badge}
+                    </span>
+                  )}
                   <Icone
-                    size={20}
-                    className="mx-auto mb-1 sm:mb-2 text-gold-400"
+                    size={28}
+                    className="mx-auto mb-2 text-gold-400"
                     aria-hidden="true"
                   />
-                  <h3 className="font-serif font-bold text-sand-50 text-xs sm:text-base leading-tight mb-0.5">
-                    {opcao.titulo}
+                  <h3 className="font-serif font-bold text-sand-50 text-base sm:text-lg leading-tight">
+                    {plano.titulo}
                   </h3>
-                  <p className="text-sand-400 text-[10px] sm:text-xs hidden sm:block">{opcao.desc}</p>
+                  {"subtitulo" in plano && plano.subtitulo && (
+                    <span className="text-gold-400 text-xs font-semibold">
+                      {plano.subtitulo}
+                    </span>
+                  )}
+                  <p className="text-3xl sm:text-4xl font-bold text-sand-50 mt-3 mb-4">
+                    {plano.preco}
+                  </p>
+                  <ul className="text-left space-y-2 mb-5 flex-1">
+                    {plano.features.map((feat) => (
+                      <li
+                        key={feat}
+                        className="flex items-start gap-2 text-sand-300 text-xs sm:text-sm"
+                      >
+                        <Check
+                          size={16}
+                          className="text-gold-400 mt-0.5 shrink-0"
+                          aria-hidden="true"
+                        />
+                        {feat}
+                      </li>
+                    ))}
+                  </ul>
+                  <button
+                    onClick={openModal}
+                    className={`w-full py-2.5 rounded-xl font-bold text-sm transition-colors ${
+                      plano.destaque
+                        ? "bg-gold-500 text-ocean-950 hover:bg-gold-400"
+                        : "bg-ocean-700/60 text-sand-100 hover:bg-ocean-600/60"
+                    }`}
+                  >
+                    Quero este
+                  </button>
                 </div>
               );
             })}
           </div>
 
           <div className="text-center">
-            <button
-              onClick={openModal}
-              className="inline-flex items-center gap-2 sm:gap-3 px-6 sm:px-10 py-3 sm:py-5 text-base sm:text-xl font-bold rounded-2xl bg-gold-500 text-ocean-950 hover:bg-gold-400 transition-all shadow-2xl hover:shadow-gold-500/30 hover:-translate-y-1"
-            >
-              <ShoppingCart size={20} aria-hidden="true" />
-              Comprar agora
-            </button>
-            <p className="text-sand-500 text-xs sm:text-sm mt-3 sm:mt-4">
-              Você envia a mensagem e o autor retorna para combinar os
-              próximos&nbsp;passos.
+            <p className="text-sand-400 text-xs sm:text-sm max-w-md mx-auto">
+              Escolha a opção que mais combina com você, clique em
+              &ldquo;Quero este&rdquo; e envie sua mensagem diretamente ao
+              autor para finalizar o pedido.
             </p>
           </div>
         </div>
